@@ -19,10 +19,10 @@
     --rule:    #d4c9b0;
     --suede:   #2a3560;
   }
- 
+
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
- 
+
   body {
     background: var(--cream);
     color: var(--ink);
@@ -30,16 +30,14 @@
     font-size: 16px;
     line-height: 1.6;
   }
- 
+
   a { color: inherit; text-decoration: none; }
- 
-  /* Herringbone SVG background pattern */
+
   .herringbone {
     background-color: var(--off);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M0 10 L5 0 L10 10 L5 20 Z' fill='%23c4b896' opacity='0.35'/%3E%3Cpath d='M10 10 L15 0 L20 10 L15 20 Z' fill='%23b5a47a' opacity='0.25'/%3E%3C/svg%3E");
   }
- 
-  /* NAV */
+
   nav {
     position: sticky;
     top: 0;
@@ -52,7 +50,7 @@
     height: 58px;
     border-bottom: 3px solid var(--mustard);
   }
- 
+
   .nav-logo {
     font-family: 'Courier New', monospace;
     font-size: 13px;
@@ -61,17 +59,11 @@
     text-transform: uppercase;
     color: var(--cream);
   }
- 
-  .nav-stripe {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    height: 100%;
-  }
- 
+
+  .nav-stripe { display: flex; align-items: center; gap: 0; height: 100%; }
   .nav-stripe-g { width: 6px; height: 100%; background: var(--green); }
   .nav-stripe-m { width: 3px; height: 100%; background: var(--mustard); }
- 
+
   .nav-links { display: flex; gap: 28px; list-style: none; }
   .nav-links a {
     font-family: 'Courier New', monospace;
@@ -82,15 +74,14 @@
     transition: color 0.15s;
   }
   .nav-links a:hover { color: var(--mustard); }
- 
-  /* HERO */
+
   #hero {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     min-height: 88vh;
     border-bottom: 2px solid var(--rule);
   }
- 
+
   .hero-left {
     padding: 80px 56px;
     display: flex;
@@ -101,8 +92,7 @@
     position: relative;
     overflow: hidden;
   }
- 
-  /* Velvet stripe accent on left edge of hero */
+
   .hero-left::before {
     content: '';
     position: absolute;
@@ -110,7 +100,7 @@
     width: 8px;
     background: linear-gradient(to bottom, var(--green) 60%, var(--mustard) 60%);
   }
- 
+
   .hero-eyebrow {
     display: inline-flex;
     align-items: center;
@@ -127,7 +117,7 @@
     width: 28px; height: 2px;
     background: var(--mustard);
   }
- 
+
   .hero-name {
     font-size: clamp(54px, 7.5vw, 100px);
     font-weight: normal;
@@ -136,11 +126,8 @@
     margin-bottom: 36px;
     color: var(--suede);
   }
-  .hero-name em {
-    font-style: italic;
-    color: var(--suede);
-  }
- 
+  .hero-name em { font-style: italic; color: var(--suede); }
+
   .hero-desc {
     font-size: 16px;
     line-height: 1.8;
@@ -148,14 +135,10 @@
     max-width: 420px;
     margin-bottom: 52px;
   }
-  .hero-desc strong {
-    color: var(--ink);
-    font-weight: normal;
-    font-style: italic;
-  }
- 
+  .hero-desc strong { color: var(--ink); font-weight: normal; font-style: italic; }
+
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
- 
+
   .btn {
     font-family: 'Courier New', monospace;
     font-size: 11px;
@@ -171,15 +154,14 @@
   .btn-navy:hover { background: var(--suede); }
   .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
   .btn-outline:hover { background: var(--navy); color: var(--cream); }
- 
+
   .hero-right {
     padding: 80px 48px;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
-  .hero-right.herringbone { }
- 
+
   .hero-fact {
     display: flex;
     justify-content: space-between;
@@ -188,7 +170,7 @@
     border-bottom: 1px solid var(--rule);
   }
   .hero-fact:first-child { border-top: 1px solid var(--rule); }
- 
+
   .fact-label {
     font-family: 'Courier New', monospace;
     font-size: 11px;
@@ -197,12 +179,10 @@
     color: var(--mid);
   }
   .fact-value { font-size: 15px; color: var(--ink); font-weight: normal; }
- 
-  /* SECTIONS */
+
   .section-wrap { padding: 80px 56px; border-bottom: 2px solid var(--rule); }
   .section-wrap.tweed { background: var(--off); }
-  .section-wrap.tweed.herringbone { }
- 
+
   .section-header {
     display: flex;
     align-items: center;
@@ -211,7 +191,7 @@
     padding-bottom: 20px;
     border-bottom: 2px solid var(--navy);
   }
- 
+
   .section-num {
     font-family: 'Courier New', monospace;
     font-size: 10px;
@@ -221,15 +201,14 @@
     background: var(--navy);
     padding: 3px 8px;
   }
- 
+
   .section-title {
     font-size: clamp(26px, 3.5vw, 44px);
     font-weight: normal;
     letter-spacing: -1px;
     color: var(--navy);
   }
- 
-  /* STRIPE DIVIDER */
+
   .stripe-bar {
     height: 6px;
     background: linear-gradient(to right,
@@ -238,10 +217,8 @@
       var(--mustard) 65%, var(--mustard) 80%,
       var(--burgundy) 80%, var(--burgundy) 100%
     );
-    margin: 0;
   }
- 
-  /* PROJECTS */
+
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -249,7 +226,7 @@
     background: var(--rule);
     border: 2px solid var(--rule);
   }
- 
+
   .project-card {
     background: var(--cream);
     padding: 40px;
@@ -273,7 +250,7 @@
   .project-card.featured { background: var(--navy); color: var(--cream); }
   .project-card.featured:hover { background: var(--suede); }
   .project-card.featured::after { background: var(--mustard); }
- 
+
   .project-index {
     font-family: 'Courier New', monospace;
     font-size: 10px;
@@ -282,7 +259,7 @@
     margin-bottom: 18px;
   }
   .project-card.featured .project-index { color: rgba(244,240,232,0.45); }
- 
+
   .project-name {
     font-size: 21px;
     font-weight: normal;
@@ -292,7 +269,7 @@
     color: var(--navy);
   }
   .project-card.featured .project-name { color: var(--cream); }
- 
+
   .project-body {
     font-size: 14px;
     line-height: 1.78;
@@ -300,9 +277,9 @@
     margin-bottom: 24px;
   }
   .project-card.featured .project-body { color: rgba(245,240,232,0.7); }
- 
+
   .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
- 
+
   .tag {
     font-family: 'Courier New', monospace;
     font-size: 10px;
@@ -317,7 +294,7 @@
     border-color: rgba(255,255,255,0.18);
     color: rgba(245,240,232,0.7);
   }
- 
+
   .project-stat {
     font-family: 'Courier New', monospace;
     font-size: 11px;
@@ -326,8 +303,7 @@
     border-top: 1px solid rgba(200,144,10,0.25);
   }
   .project-card:not(.featured) .project-stat { color: var(--green); border-color: var(--rule); }
- 
-  /* AWARDS */
+
   .awards-table { width: 100%; border-collapse: collapse; }
   .awards-table tr {
     border-bottom: 1px solid var(--rule);
@@ -335,7 +311,7 @@
   }
   .awards-table tr:hover { background: var(--cream); }
   .awards-table td { padding: 20px 14px; vertical-align: middle; }
- 
+
   .award-place {
     font-family: 'Courier New', monospace;
     font-weight: bold;
@@ -345,7 +321,7 @@
   }
   .award-name-cell { font-size: 16px; color: var(--navy); }
   .award-scope-cell { font-size: 13px; color: var(--mid); font-style: italic; }
- 
+
   .award-pill {
     font-family: 'Courier New', monospace;
     font-size: 9px;
@@ -358,8 +334,7 @@
   .pill-intl { background: var(--navy);     color: var(--mustard); }
   .pill-bot  { background: var(--burgundy); color: var(--cream); }
   .pill-biz  { background: var(--tweed);    color: var(--ink); }
- 
-  /* SKILLS */
+
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -367,18 +342,17 @@
     background: var(--rule);
     border: 2px solid var(--rule);
   }
- 
+
   .skill-group {
     background: var(--cream);
     padding: 32px;
     border-top: 3px solid transparent;
-    transition: border-color 0.18s;
   }
   .skill-group:nth-child(1) { border-top-color: var(--navy); }
   .skill-group:nth-child(2) { border-top-color: var(--green); }
   .skill-group:nth-child(3) { border-top-color: var(--mustard); }
   .skill-group:nth-child(4) { border-top-color: var(--burgundy); }
- 
+
   .skill-group-title {
     font-family: 'Courier New', monospace;
     font-size: 10px;
@@ -389,7 +363,7 @@
     padding-bottom: 12px;
     border-bottom: 1px solid var(--rule);
   }
- 
+
   .skill-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
   .skill-list li {
     font-size: 14px;
@@ -397,9 +371,8 @@
     padding-left: 14px;
     position: relative;
   }
-  .skill-list li::before { content: '–'; position: absolute; left: 0; color: var(--rule); }
- 
-  /* EXPERIENCE */
+  .skill-list li::before { content: '--'; position: absolute; left: 0; color: var(--rule); }
+
   .exp-list {
     display: flex;
     flex-direction: column;
@@ -407,7 +380,7 @@
     background: var(--rule);
     border: 2px solid var(--rule);
   }
- 
+
   .exp-item {
     background: var(--cream);
     padding: 40px;
@@ -421,8 +394,9 @@
   .exp-item:nth-child(2) { border-left-color: var(--green); }
   .exp-item:nth-child(3) { border-left-color: var(--mustard); }
   .exp-item:nth-child(4) { border-left-color: var(--burgundy); }
+  .exp-item:nth-child(5) { border-left-color: var(--tweed); }
   .exp-item:hover { background: var(--off); }
- 
+
   .exp-type {
     font-family: 'Courier New', monospace;
     font-size: 10px;
@@ -433,16 +407,15 @@
   }
   .exp-org { font-size: 17px; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.3px; }
   .exp-date { font-family: 'Courier New', monospace; font-size: 11px; color: var(--light); }
- 
+
   .exp-points { list-style: none; display: flex; flex-direction: column; gap: 11px; }
   .exp-points li {
     font-size: 14px; line-height: 1.72; color: var(--mid);
     padding-left: 18px; position: relative;
   }
-  .exp-points li::before { content: '→'; position: absolute; left: 0; color: var(--rule); font-size: 12px; top: 2px; }
+  .exp-points li::before { content: 'o'; position: absolute; left: 0; color: var(--rule); font-size: 12px; top: 2px; }
   .exp-points li strong { color: var(--ink); font-weight: normal; font-style: italic; }
- 
-  /* CONTACT */
+
   #contact {
     padding: 100px 56px;
     display: grid;
@@ -452,7 +425,7 @@
     background: var(--navy);
     color: var(--cream);
   }
- 
+
   .contact-left h2 {
     font-size: clamp(34px, 5vw, 62px);
     font-weight: normal;
@@ -463,9 +436,9 @@
   }
   .contact-left h2 em { font-style: italic; color: var(--mustard); }
   .contact-left p { font-size: 15px; color: rgba(245,240,232,0.6); line-height: 1.75; max-width: 360px; }
- 
+
   .contact-right { display: flex; flex-direction: column; gap: 10px; }
- 
+
   .contact-item {
     display: flex;
     align-items: center;
@@ -475,7 +448,7 @@
     transition: all 0.18s;
   }
   .contact-item:hover { border-color: var(--mustard); background: rgba(245,240,232,0.05); }
- 
+
   .contact-item-label {
     font-family: 'Courier New', monospace;
     font-size: 10px;
@@ -484,8 +457,7 @@
     color: rgba(245,240,232,0.35);
   }
   .contact-item-value { font-size: 14px; color: var(--cream); }
- 
-  /* FOOTER */
+
   footer {
     background: var(--ink);
     color: rgba(245,240,232,0.4);
@@ -497,8 +469,7 @@
     font-size: 11px;
     letter-spacing: 0.08em;
   }
- 
-  /* RESPONSIVE */
+
   @media (max-width: 768px) {
     nav { padding: 0 20px; }
     .nav-links { display: none; }
@@ -517,8 +488,7 @@
 </style>
 </head>
 <body>
- 
-<!-- NAV -->
+
 <nav>
   <div class="nav-logo">Sohum Vajaria</div>
   <div class="nav-stripe">
@@ -533,20 +503,21 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
- 
-<!-- HERO -->
+
 <section id="hero">
   <div class="hero-left">
     <div>
       <div class="hero-eyebrow">Open to internships &amp; research</div>
       <h1 class="hero-name">Sohum<br><em>Vajaria</em></h1>
       <p class="hero-desc">
-        Sophomore at <strong>Panther Creek High</strong> building real hardware.
-        I work across <strong>mechanical systems</strong>, <strong>embedded electronics</strong>,
-        and <strong>computer vision</strong>.
+        Rising junior at <strong>NCSSM Durham</strong> building real hardware.
+        CTO of <strong>Tremora</strong>, a wearable medical device startup.
+        I work across <strong>PCB design</strong>, <strong>embedded systems</strong>,
+        and <strong>mechanical engineering</strong>.
       </p>
       <div class="hero-actions">
         <a href="#projects" class="btn btn-navy">See My Work</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
       </div>
     </div>
   </div>
@@ -558,88 +529,97 @@
       </div>
       <div class="hero-fact">
         <span class="fact-label">School</span>
-        <span class="fact-value">Panther Creek High</span>
+        <span class="fact-value">NCSSM Durham</span>
       </div>
       <div class="hero-fact">
         <span class="fact-label">Year</span>
-        <span class="fact-value">Sophomore, Class of 2028</span>
+        <span class="fact-value">Rising Junior, Class of 2027</span>
+      </div>
+      <div class="hero-fact">
+        <span class="fact-label">Role</span>
+        <span class="fact-value">CTO, Tremora</span>
       </div>
       <div class="hero-fact">
         <span class="fact-label">Focus</span>
-        <span class="fact-value">Mechanical, Electrical, Software</span>
+        <span class="fact-value">PCB Design, Embedded Systems, CAD</span>
       </div>
       <div class="hero-fact">
         <span class="fact-label">Email</span>
-        <span class="fact-value"><a href="/cdn-cgi/l/email-protection#d3a0bcbba6bea5b2b9b2a1bab293b4beb2babffdb0bcbe" style="color:var(--ink);text-decoration:underline;">sohumvajaria&#64;gmail.com</a></span>
+        <span class="fact-value"><a href="mailto:sohumvajaria@gmail.com" style="color:var(--ink);text-decoration:underline;">sohumvajaria@gmail.com</a></span>
       </div>
     </div>
   </div>
 </section>
- 
+
 <div class="stripe-bar"></div>
- 
-<!-- PROJECTS -->
+
 <section id="projects" class="section-wrap">
   <div class="section-header">
     <span class="section-num">01</span>
     <h2 class="section-title">Projects</h2>
   </div>
   <div class="projects-grid">
+
     <div class="project-card span2 featured">
-      <div class="project-index">001 — Featured</div>
-      <div class="project-name">Computer Vision Soldering Robot</div>
-      <p class="project-body">Built a gantry robot that solders PCB pins automatically. Used OpenCV for pin detection and planar homography to map camera coordinates to board coordinates. Achieves 1.2mm placement accuracy, precise enough for real PCB assembly work.</p>
+      <div class="project-index">001 — Featured / Startup</div>
+      <div class="project-name">Tremora — Parkinson's Tremor Monitor</div>
+      <p class="project-body">CTO of a 4-person student startup building a wrist-worn device that captures Parkinson's tremor data using gyroscopes and accelerometers, logging to SD card for clinical review. I own the full hardware stack: KiCad PCB design, electrical systems, and Onshape CAD. Pitching at Atlanta Startup Village this summer.</p>
       <div class="project-tags">
-        <span class="tag">OpenCV</span>
-        <span class="tag">Computer Vision</span>
-        <span class="tag">Python</span>
-        <span class="tag">CNC Gantry</span>
-        <span class="tag">PCB</span>
-        <span class="tag">Planar Homography</span>
+        <span class="tag">KiCad PCB</span>
+        <span class="tag">Gyroscope / Accelerometer</span>
+        <span class="tag">Embedded C</span>
+        <span class="tag">Onshape CAD</span>
+        <span class="tag">SD Card Logging</span>
+        <span class="tag">Medical Device</span>
       </div>
-      <div class="project-stat">→ 1.2mm placement accuracy on live PCB pins</div>
+      <div class="project-stat">Pitching at Atlanta Startup Village — Summer 2026</div>
     </div>
+
     <div class="project-card">
       <div class="project-index">002</div>
+      <div class="project-name">Computer Vision Soldering Robot</div>
+      <p class="project-body">Gantry robot that automatically solders PCB pins using OpenCV for pin detection and planar homography to map camera coordinates to board coordinates. Achieves 1.2mm placement accuracy, precise enough for real PCB assembly.</p>
+      <div class="project-tags">
+        <span class="tag">OpenCV</span>
+        <span class="tag">Python</span>
+        <span class="tag">CNC Gantry</span>
+        <span class="tag">Planar Homography</span>
+        <span class="tag">PCB</span>
+      </div>
+      <div class="project-stat">1.2mm placement accuracy on live PCB pins</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-index">003</div>
       <div class="project-name">Magnetic Mecanum Truss Inspection Bot</div>
-      <p class="project-body">ESP32-powered robot that climbs steel warehouse trusses using a magnetic mecanum drive. Carries a thermal sensor to flag heat anomalies in structural components during inspection.</p>
+      <p class="project-body">ESP32-powered robot that climbs steel warehouse trusses using a magnetic mecanum drive. Carries a thermal sensor to flag heat anomalies in structural components during automated inspection.</p>
       <div class="project-tags">
         <span class="tag">ESP32</span>
         <span class="tag">Mecanum Drive</span>
         <span class="tag">Thermal Sensing</span>
         <span class="tag">Magnetics</span>
       </div>
-      <div class="project-stat">→ Stable vertical traversal on steel trusses</div>
+      <div class="project-stat">Stable vertical traversal on steel trusses</div>
     </div>
-    <div class="project-card">
-      <div class="project-index">003</div>
-      <div class="project-name">Smart Lunch Tracker</div>
-      <p class="project-body">Microcontroller system to track classroom lunch visits. Button inputs, LED indicators, and EEPROM storage keep records intact across full power cycles without any external dependency.</p>
-      <div class="project-tags">
-        <span class="tag">Arduino</span>
-        <span class="tag">EEPROM</span>
-        <span class="tag">Embedded C</span>
-      </div>
-      <div class="project-stat">→ Persistent data across full power loss</div>
-    </div>
+
     <div class="project-card span2">
       <div class="project-index">004 — Robotics</div>
       <div class="project-name">FTC Robot: Spindexer + Outtake System</div>
-      <p class="project-body">CAD and build co-lead for FTC robotics team. Designed and integrated the Spindexer and outtake mechanism from CAD through final assembly. Optimized drivetrain for torque and durability under competition stress.</p>
+      <p class="project-body">CAD and build co-lead for FTC robotics team. Designed and integrated the Spindexer and outtake mechanism from CAD through final competition assembly. Optimized drivetrain for torque and durability under competition stress.</p>
       <div class="project-tags">
         <span class="tag">Onshape CAD</span>
         <span class="tag">Mechanical Design</span>
         <span class="tag">Drivetrain</span>
         <span class="tag">FTC Robotics</span>
       </div>
-      <div class="project-stat">→ FTC Impact Award — 1st Place</div>
+      <div class="project-stat">FTC Impact Award — 1st Place</div>
     </div>
+
   </div>
 </section>
- 
+
 <div class="stripe-bar"></div>
- 
-<!-- AWARDS -->
+
 <section id="awards" class="section-wrap tweed herringbone">
   <div class="section-header">
     <span class="section-num">02</span>
@@ -672,9 +652,15 @@
         <td><span class="award-pill pill-intl">International</span></td>
       </tr>
       <tr>
-        <td class="award-place">SF</td>
-        <td class="award-name-cell">Biology Olympiad</td>
-        <td class="award-scope-cell">Semifinalist — National</td>
+        <td class="award-place">Nationalist</td>
+        <td class="award-name-cell">US National Chemistry Olympiad</td>
+        <td class="award-scope-cell">National — Top 1000 in US</td>
+        <td><span class="award-pill pill-nat">National</span></td>
+      </tr>
+      <tr>
+        <td class="award-place">Semifinalist</td>
+        <td class="award-name-cell">US Biology Olympiad</td>
+        <td class="award-scope-cell">National</td>
         <td><span class="award-pill pill-nat">National</span></td>
       </tr>
       <tr>
@@ -686,10 +672,9 @@
     </tbody>
   </table>
 </section>
- 
+
 <div class="stripe-bar"></div>
- 
-<!-- SKILLS -->
+
 <section id="skills" class="section-wrap">
   <div class="section-header">
     <span class="section-num">03</span>
@@ -697,72 +682,98 @@
   </div>
   <div class="skills-grid">
     <div class="skill-group">
-      <div class="skill-group-title">CAD &amp; Design</div>
+      <div class="skill-group-title">PCB &amp; Electronics</div>
       <ul class="skill-list">
-        <li>Onshape</li>
-        <li>3D Printing</li>
-        <li>Technical Visualization</li>
-        <li>Mechanical Assembly</li>
+        <li>KiCad PCB Design</li>
+        <li>Circuit Prototyping</li>
+        <li>Sensor Integration</li>
+        <li>PCB Soldering</li>
+        <li>ESP32 / Arduino</li>
       </ul>
     </div>
     <div class="skill-group">
-      <div class="skill-group-title">Electronics</div>
+      <div class="skill-group-title">CAD &amp; Mechanical</div>
       <ul class="skill-list">
-        <li>PCB Soldering</li>
-        <li>Circuit Prototyping</li>
-        <li>ESP32</li>
-        <li>Arduino</li>
-        <li>Sensor Integration</li>
+        <li>Onshape</li>
+        <li>3D Printing</li>
+        <li>Mechanical Assembly</li>
+        <li>Technical Visualization</li>
       </ul>
     </div>
     <div class="skill-group">
       <div class="skill-group-title">Software</div>
       <ul class="skill-list">
+        <li>Embedded C</li>
         <li>Python</li>
         <li>OpenCV</li>
-        <li>Embedded C</li>
         <li>Motor Control</li>
-        <li>EEPROM Storage</li>
+        <li>Data Logging</li>
       </ul>
     </div>
     <div class="skill-group">
       <div class="skill-group-title">Other</div>
       <ul class="skill-list">
+        <li>Startup Leadership</li>
         <li>Project Management</li>
         <li>Technical Presentation</li>
         <li>Team Leadership</li>
-        <li>Microsoft Office</li>
       </ul>
     </div>
   </div>
 </section>
- 
+
 <div class="stripe-bar"></div>
- 
-<!-- EXPERIENCE -->
+
 <section id="experience" class="section-wrap tweed herringbone">
   <div class="section-header">
     <span class="section-num">04</span>
     <h2 class="section-title">Experience</h2>
   </div>
   <div class="exp-list">
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-type">Startup / CTO</div>
+        <div class="exp-org">Tremora</div>
+        <div class="exp-date">2026 — Present</div>
+      </div>
+      <ul class="exp-points">
+        <li>Lead all hardware development for a <strong>wearable Parkinson's tremor monitor</strong> using gyroscopes, accelerometers, and SD card logging</li>
+        <li>Own the full technical stack: <strong>KiCad PCB design, electrical systems, and Onshape CAD</strong></li>
+        <li>Pitching at <strong>Atlanta Startup Village</strong>, summer 2026</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-type">Internship</div>
+        <div class="exp-org">Advanced Weapons Systems, Inc.</div>
+        <div class="exp-date">Summer 2026</div>
+      </div>
+      <ul class="exp-points">
+        <li>Working on <strong>sensor-based hardware systems</strong> at a defense technology company</li>
+        <li>Applying embedded systems and electromechanical design skills in a <strong>professional engineering environment</strong></li>
+      </ul>
+    </div>
+
     <div class="exp-item">
       <div>
         <div class="exp-type">Robotics Leadership</div>
         <div class="exp-org">FTC Robotics Team</div>
-        <div class="exp-date">2025 – 2026</div>
+        <div class="exp-date">2025 — 2026</div>
       </div>
       <ul class="exp-points">
-        <li>Led CAD and build for <strong>Spindexer and outtake system</strong>, from design through competition assembly</li>
+        <li>CAD and build co-lead for <strong>Spindexer and outtake system</strong>, from design through competition assembly</li>
         <li>Developed drivetrain optimized for <strong>torque and durability</strong> under competition stress</li>
         <li>Won <strong>FTC Impact Award, 1st Place</strong></li>
       </ul>
     </div>
+
     <div class="exp-item">
       <div>
         <div class="exp-type">Club Leadership</div>
         <div class="exp-org">Science Club President</div>
-        <div class="exp-date">2025 – 2026</div>
+        <div class="exp-date">2025 — 2026</div>
       </div>
       <ul class="exp-points">
         <li>Directed operations for a <strong>40+ member</strong> organization with weekly meetings</li>
@@ -770,51 +781,35 @@
         <li>Mentored junior members in research methods and project execution</li>
       </ul>
     </div>
-    <div class="exp-item">
-      <div>
-        <div class="exp-type">Freelance</div>
-        <div class="exp-org">CAD Modeling</div>
-        <div class="exp-date">Ongoing</div>
-      </div>
-      <ul class="exp-points">
-        <li>Created high-fidelity <strong>3D models for product presentations</strong></li>
-        <li>Produced technical visualizations used in <strong>executive-level meetings</strong></li>
-      </ul>
-    </div>
-    <div class="exp-item">
-      <div>
-        <div class="exp-type">Tutoring</div>
-        <div class="exp-org">Science Bowl &amp; Olympiad Coach</div>
-        <div class="exp-date">Ongoing</div>
-      </div>
-      <ul class="exp-points">
-        <li>Guided middle school students and teams through Science Bowl and Olympiad preparation</li>
-        <li>Improved team scoring by <strong>~25%</strong></li>
-      </ul>
-    </div>
+
   </div>
 </section>
- 
-<!-- CONTACT -->
+
 <section id="contact">
   <div class="contact-left">
     <h2>Let's build<br><em>something.</em></h2>
     <p>Open to internships, research positions, and interesting engineering problems. Reach out any time.</p>
   </div>
   <div class="contact-right">
-    <a href="/cdn-cgi/l/email-protection#a2d1cdcad7cfd4c3c8c3d0cbc3e2c5cfc3cbce8cc1cdcf" class="contact-item">
+    <a href="mailto:sohumvajaria@gmail.com" class="contact-item">
       <span class="contact-item-label">Email</span>
-      <span class="contact-item-value">sohumvajaria&#64;gmail.com</span>
+      <span class="contact-item-value">sohumvajaria@gmail.com</span>
     </a>
-    <a href="tel:9255025781" class="contact-item">
-      <span class="contact-item-label">Phone</span>
-      <span class="contact-item-value">925-502-5781</span>
-    </a>    <div class="contact-item">
+    <div class="contact-item">
       <span class="contact-item-label">Location</span>
       <span class="contact-item-value">Cary, NC</span>
     </div>
+    <a href="https://github.com/sohumvajaria" target="_blank" class="contact-item">
+      <span class="contact-item-label">GitHub</span>
+      <span class="contact-item-value">github.com/sohumvajaria</span>
+    </a>
   </div>
 </section>
- 
+
 <footer>
-  <s
+  <span>Sohum Vajaria — NCSSM Durham</span>
+  <span>sohumvajaria.github.io</span>
+</footer>
+
+</body>
+</html>
