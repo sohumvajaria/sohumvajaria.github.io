@@ -1,815 +1,1048 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="schematic">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sohum Vajaria</title>
+<title>Sohum Vajaria · Hardware + Software</title>
+<meta name="description" content="Sohum Vajaria. NCSSM Durham. Co-founder of Tremora. PCB design, embedded systems, and shipped software.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy:    #1b2340;
-    --burgundy:#6b1f2a;
-    --green:   #1e4d2b;
-    --mustard: #c8900a;
-    --tweed:   #b5a07a;
-    --cream:   #f5f0e8;
-    --off:     #ede7d9;
-    --ink:     #1a1610;
-    --mid:     #5a5040;
-    --light:   #a09070;
-    --rule:    #d4c9b0;
-    --suede:   #2a3560;
+:root {
+  --sheet: #F6F5EF;
+  --panel: #EFEEE6;
+  --ink: #201F18;
+  --mid: #6B675A;
+  --faint: #A8A395;
+  --grid: #E2E0D2;
+  --rule: #CFCCBB;
+  --copper: #B06E2A;
+  --copper-dim: rgba(176,110,42,0.14);
+  --mask: #1A5632;
+  --mask-dim: rgba(26,86,50,0.10);
+  --silk: #FFFFFF;
+  --shadow: rgba(32,31,24,0.08);
+}
+[data-theme="soldermask"] {
+  --sheet: #0C2E1E;
+  --panel: #103A26;
+  --ink: #EAE6D6;
+  --mid: #9FB3A3;
+  --faint: #5E7A69;
+  --grid: #16412C;
+  --rule: #1E4D35;
+  --copper: #D89048;
+  --copper-dim: rgba(216,144,72,0.16);
+  --mask: #7FD6A4;
+  --mask-dim: rgba(127,214,164,0.10);
+  --silk: #EAE6D6;
+  --shadow: rgba(0,0,0,0.35);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--sheet);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  transition: background-color 0.3s, color 0.3s;
+}
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--copper); color: var(--sheet); }
+:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.frame { max-width: 1180px; margin: 0 auto; border-left: 1.5px solid var(--rule); border-right: 1.5px solid var(--rule); background: var(--sheet); position: relative; }
+
+/* ---------- trace spine ---------- */
+#trace-svg {
+  position: absolute;
+  left: -1px; top: 0;
+  width: 40px; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+#trace-path {
+  stroke: var(--copper);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.via {
+  fill: var(--sheet);
+  stroke: var(--copper);
+  stroke-width: 2.5;
+}
+
+/* ---------- nav ---------- */
+nav {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--sheet);
+  border-bottom: 1.5px solid var(--rule);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 56px;
+  transition: background-color 0.3s;
+}
+.nav-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 18px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.nav-name .ref { color: var(--copper); }
+.nav-links { display: flex; gap: 26px; list-style: none; align-items: center; }
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mid); transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--copper); }
+#theme-toggle {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: none; border: 1.5px solid var(--rule); color: var(--mid);
+  padding: 6px 12px; cursor: pointer; transition: all 0.15s;
+}
+#theme-toggle:hover { border-color: var(--copper); color: var(--copper); }
+
+/* ---------- hero ---------- */
+#hero { padding: 90px 64px 70px; position: relative; }
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--copper); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.hero-eyebrow .sep { color: var(--faint); }
+.blink { animation: blink 1.4s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: clamp(64px, 10vw, 132px);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin-bottom: 34px;
+}
+.hero-name .outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--copper);
+}
+.hero-desc {
+  font-size: 17px; line-height: 1.8;
+  color: var(--mid); max-width: 560px; margin-bottom: 40px;
+}
+.hero-desc strong { color: var(--ink); font-weight: 600; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 14px 28px; cursor: pointer; border: 1.5px solid var(--ink);
+  transition: all 0.18s; display: inline-block; background: none; color: var(--ink);
+}
+.btn-solid { background: var(--ink); color: var(--sheet); }
+.btn-solid:hover { background: var(--copper); border-color: var(--copper); color: #fff; }
+.btn-line:hover { background: var(--copper-dim); border-color: var(--copper); color: var(--copper); }
+
+/* ---------- now strip ---------- */
+#now {
+  border-top: 1.5px solid var(--rule);
+  border-bottom: 1.5px solid var(--rule);
+  background: var(--panel);
+  padding: 20px 64px;
+  display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap;
+}
+#now .now-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.16em; color: var(--copper);
+  display: flex; align-items: center; gap: 8px;
+}
+.pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--copper); display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+#now .now-items { font-size: 14px; color: var(--mid); }
+#now .now-items b { color: var(--ink); font-weight: 500; }
+
+/* ---------- sections ---------- */
+section.block { padding: 76px 64px; border-bottom: 1.5px solid var(--rule); position: relative; }
+.section-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 44px; padding-bottom: 16px; border-bottom: 2px solid var(--ink);
+  flex-wrap: wrap; gap: 12px;
+}
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: clamp(32px, 4.5vw, 52px);
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+.section-ref {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.12em; color: var(--faint); text-transform: uppercase;
+}
+
+/* ---------- filters ---------- */
+.filters { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+.filter-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 9px 18px; border: 1.5px solid var(--rule); background: none;
+  color: var(--mid); cursor: pointer; transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--copper); color: var(--copper); }
+.filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--sheet); }
+.filter-btn .count { color: var(--copper); margin-left: 6px; }
+.filter-btn.active .count { color: var(--copper); }
+
+/* ---------- project grid ---------- */
+.projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.project-card {
+  border: 1.5px solid var(--rule);
+  background: var(--sheet);
+  padding: 32px;
+  position: relative;
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, opacity 0.3s;
+  display: flex; flex-direction: column;
+}
+.project-card:hover {
+  border-color: var(--copper);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+.project-card.hidden { display: none; }
+.project-card.featured { grid-column: span 2; background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+[data-theme="soldermask"] .project-card.featured { background: #071F14; }
+.project-card.featured:hover { border-color: var(--copper); }
+.project-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px;
+}
+.project-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--copper);
+}
+.project-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 3px 9px; border: 1px solid var(--rule); color: var(--mid);
+}
+.status-live { border-color: var(--mask); color: var(--mask); }
+.status-wip { border-color: var(--copper); color: var(--copper); }
+.project-card.featured .project-status { border-color: rgba(255,255,255,0.25); color: rgba(246,245,239,0.7); }
+.project-card.featured .status-wip { border-color: var(--copper); color: var(--copper); }
+.project-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600; font-size: 26px; text-transform: uppercase;
+  letter-spacing: 0.02em; margin-bottom: 12px; line-height: 1.1;
+}
+.project-body { font-size: 14.5px; line-height: 1.75; color: var(--mid); margin-bottom: 22px; flex: 1; }
+.project-card.featured .project-body { color: rgba(246,245,239,0.72); }
+.project-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 16px; border-top: 1px solid var(--rule);
+  flex-wrap: wrap; gap: 10px;
+}
+.project-card.featured .project-foot { border-color: rgba(255,255,255,0.15); }
+.project-stack {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px; color: var(--faint); letter-spacing: 0.04em;
+}
+.project-card.featured .project-stack { color: rgba(246,245,239,0.45); }
+.project-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--copper);
+  border-bottom: 1px solid var(--copper);
+  padding-bottom: 2px;
+  transition: opacity 0.15s;
+}
+.project-link:hover { opacity: 0.7; }
+
+/* ---------- github strip ---------- */
+#gh-strip {
+  margin-top: 28px;
+  border: 1.5px dashed var(--rule);
+  padding: 18px 24px;
+  display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; color: var(--mid);
+}
+#gh-strip .gh-label { color: var(--copper); letter-spacing: 0.12em; text-transform: uppercase; font-size: 10px; }
+#gh-strip b { color: var(--ink); font-weight: 500; }
+
+/* ---------- awards ---------- */
+.awards-table { width: 100%; border-collapse: collapse; }
+.awards-table tr { border-bottom: 1px solid var(--rule); transition: background 0.12s; }
+.awards-table tr:hover { background: var(--panel); }
+.awards-table td { padding: 18px 12px; vertical-align: middle; }
+.award-place {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500; font-size: 14px; color: var(--copper); width: 110px; white-space: nowrap;
+}
+.award-name { font-size: 16px; font-weight: 500; }
+.award-scope { font-size: 13px; color: var(--mid); }
+.award-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 10px; border: 1px solid var(--rule); color: var(--mid); white-space: nowrap;
+}
+.pill-nat { border-color: var(--mask); color: var(--mask); }
+.pill-intl { border-color: var(--copper); color: var(--copper); }
+
+/* ---------- experience ---------- */
+.exp-list { display: flex; flex-direction: column; }
+.exp-item {
+  display: grid; grid-template-columns: 240px 1fr; gap: 40px;
+  padding: 34px 0; border-bottom: 1px solid var(--rule);
+}
+.exp-item:last-child { border-bottom: none; }
+.exp-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--copper); margin-bottom: 8px;
+}
+.exp-org { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 22px; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 5px; }
+.exp-date { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--faint); }
+.exp-body { font-size: 14.5px; line-height: 1.8; color: var(--mid); }
+.exp-body strong { color: var(--ink); font-weight: 500; }
+
+/* ---------- tooling ---------- */
+#tooling { padding: 40px 64px; border-bottom: 1.5px solid var(--rule); background: var(--panel); }
+#tooling .tool-row {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px; color: var(--mid); line-height: 2.2;
+}
+#tooling .tool-row b { color: var(--copper); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; font-size: 10.5px; margin-right: 10px; }
+#tooling .tool-row span { color: var(--ink); }
+#tooling .dot { color: var(--faint); margin: 0 8px; }
+
+/* ---------- contact ---------- */
+#contact {
+  padding: 90px 64px;
+  background: var(--ink); color: var(--sheet);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+[data-theme="soldermask"] #contact { background: #071F14; }
+.contact-left h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: clamp(40px, 6vw, 72px);
+  text-transform: uppercase; line-height: 0.95; margin-bottom: 18px;
+}
+.contact-left h2 .outline { color: transparent; -webkit-text-stroke: 2px var(--copper); }
+.contact-left p { font-size: 15px; color: rgba(246,245,239,0.6); max-width: 380px; line-height: 1.75; }
+.contact-right { display: flex; flex-direction: column; gap: 10px; }
+.contact-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; border: 1px solid rgba(246,245,239,0.18);
+  transition: all 0.15s; cursor: pointer; background: none; color: inherit;
+  font-family: inherit; font-size: inherit; width: 100%; text-align: left;
+}
+.contact-item:hover { border-color: var(--copper); background: rgba(255,255,255,0.04); }
+.ci-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(246,245,239,0.4);
+}
+.ci-value { font-size: 14px; font-family: 'IBM Plex Mono', monospace; }
+
+/* ---------- title block footer ---------- */
+#titleblock {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr 1fr 1fr 1fr;
+  border-top: 1.5px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace;
+}
+#titleblock .tb-cell {
+  border-right: 1.5px solid var(--rule);
+  padding: 14px 18px;
+}
+#titleblock .tb-cell:last-child { border-right: none; }
+.tb-label { font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 4px; }
+.tb-value { font-size: 12px; color: var(--ink); }
+
+/* ---------- reveal ---------- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---------- scroll progress ---------- */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: var(--copper); z-index: 100;
+}
+
+/* ---------- CAD crosshair cursor (fine pointers only) ---------- */
+@media (pointer: fine) {
+  body.cursor-on, body.cursor-on a, body.cursor-on button { cursor: none; }
+  #xh-v, #xh-h {
+    position: fixed; pointer-events: none; z-index: 99;
+    background: var(--copper); opacity: 0.35;
   }
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 16px;
-    line-height: 1.6;
+  #xh-v { top: 0; width: 1px; height: 100vh; }
+  #xh-h { left: 0; height: 1px; width: 100vw; }
+  #xh-box {
+    position: fixed; pointer-events: none; z-index: 99;
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--copper);
+    transform: translate(-50%, -50%);
+    transition: width 0.15s, height 0.15s, background 0.15s;
   }
-
-  a { color: inherit; text-decoration: none; }
-
-  .herringbone {
-    background-color: var(--off);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M0 10 L5 0 L10 10 L5 20 Z' fill='%23c4b896' opacity='0.35'/%3E%3Cpath d='M10 10 L15 0 L20 10 L15 20 Z' fill='%23b5a47a' opacity='0.25'/%3E%3C/svg%3E");
-  }
-
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--navy);
-    padding: 0 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 58px;
-    border-bottom: 3px solid var(--mustard);
-  }
-
-  .nav-logo {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--cream);
-  }
-
-  .nav-stripe { display: flex; align-items: center; gap: 0; height: 100%; }
-  .nav-stripe-g { width: 6px; height: 100%; background: var(--green); }
-  .nav-stripe-m { width: 3px; height: 100%; background: var(--mustard); }
-
-  .nav-links { display: flex; gap: 28px; list-style: none; }
-  .nav-links a {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.6);
-    transition: color 0.15s;
-  }
-  .nav-links a:hover { color: var(--mustard); }
-
-  #hero {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    min-height: 88vh;
-    border-bottom: 2px solid var(--rule);
-  }
-
-  .hero-left {
-    padding: 80px 56px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: var(--cream);
-    border-right: 2px solid var(--rule);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-left::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 8px;
-    background: linear-gradient(to bottom, var(--green) 60%, var(--mustard) 60%);
-  }
-
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 36px;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    width: 28px; height: 2px;
-    background: var(--mustard);
-  }
-
-  .hero-name {
-    font-size: clamp(54px, 7.5vw, 100px);
-    font-weight: normal;
-    line-height: 0.95;
-    letter-spacing: -3px;
-    margin-bottom: 36px;
-    color: var(--suede);
-  }
-  .hero-name em { font-style: italic; color: var(--suede); }
-
-  .hero-desc {
-    font-size: 16px;
-    line-height: 1.8;
-    color: var(--mid);
-    max-width: 420px;
-    margin-bottom: 52px;
-  }
-  .hero-desc strong { color: var(--ink); font-weight: normal; font-style: italic; }
-
-  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
-  .btn {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    padding: 13px 26px;
-    display: inline-block;
-    transition: all 0.18s;
-    border: none;
-    cursor: pointer;
-  }
-  .btn-navy { background: var(--navy); color: var(--cream); }
-  .btn-navy:hover { background: var(--suede); }
-  .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
-  .btn-outline:hover { background: var(--navy); color: var(--cream); }
-
-  .hero-right {
-    padding: 80px 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .hero-fact {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 17px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .hero-fact:first-child { border-top: 1px solid var(--rule); }
-
-  .fact-label {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--mid);
-  }
-  .fact-value { font-size: 15px; color: var(--ink); font-weight: normal; }
-
-  .section-wrap { padding: 80px 56px; border-bottom: 2px solid var(--rule); }
-  .section-wrap.tweed { background: var(--off); }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 56px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--navy);
-  }
-
-  .section-num {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--mustard);
-    background: var(--navy);
-    padding: 3px 8px;
-  }
-
-  .section-title {
-    font-size: clamp(26px, 3.5vw, 44px);
-    font-weight: normal;
-    letter-spacing: -1px;
-    color: var(--navy);
-  }
-
-  .stripe-bar {
-    height: 6px;
-    background: linear-gradient(to right,
-      var(--navy) 0%, var(--navy) 40%,
-      var(--green) 40%, var(--green) 65%,
-      var(--mustard) 65%, var(--mustard) 80%,
-      var(--burgundy) 80%, var(--burgundy) 100%
-    );
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2px;
-    background: var(--rule);
-    border: 2px solid var(--rule);
-  }
-
-  .project-card {
-    background: var(--cream);
-    padding: 40px;
-    position: relative;
-    transition: background 0.18s;
-    overflow: hidden;
-  }
-  .project-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--navy);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.25s ease;
-  }
-  .project-card:hover { background: var(--off); }
-  .project-card:hover::after { transform: scaleX(1); }
-  .project-card.span2 { grid-column: span 2; }
-  .project-card.featured { background: var(--navy); color: var(--cream); }
-  .project-card.featured:hover { background: var(--suede); }
-  .project-card.featured::after { background: var(--mustard); }
-
-  .project-index {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--light);
-    margin-bottom: 18px;
-  }
-  .project-card.featured .project-index { color: rgba(244,240,232,0.45); }
-
-  .project-name {
-    font-size: 21px;
-    font-weight: normal;
-    letter-spacing: -0.5px;
-    margin-bottom: 14px;
-    line-height: 1.2;
-    color: var(--navy);
-  }
-  .project-card.featured .project-name { color: var(--cream); }
-
-  .project-body {
-    font-size: 14px;
-    line-height: 1.78;
-    color: var(--mid);
-    margin-bottom: 24px;
-  }
-  .project-card.featured .project-body { color: rgba(245,240,232,0.7); }
-
-  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-
-  .tag {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    padding: 3px 9px;
-    border: 1px solid var(--rule);
-    color: var(--mid);
-    background: var(--off);
-  }
-  .project-card.featured .tag {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.18);
-    color: rgba(245,240,232,0.7);
-  }
-
-  .project-stat {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: var(--mustard);
-    padding-top: 16px;
-    border-top: 1px solid rgba(200,144,10,0.25);
-  }
-  .project-card:not(.featured) .project-stat { color: var(--green); border-color: var(--rule); }
-
-  .awards-table { width: 100%; border-collapse: collapse; }
-  .awards-table tr {
-    border-bottom: 1px solid var(--rule);
-    transition: background 0.15s;
-  }
-  .awards-table tr:hover { background: var(--cream); }
-  .awards-table td { padding: 20px 14px; vertical-align: middle; }
-
-  .award-place {
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    font-size: 14px;
-    color: var(--mustard);
-    width: 72px;
-  }
-  .award-name-cell { font-size: 16px; color: var(--navy); }
-  .award-scope-cell { font-size: 13px; color: var(--mid); font-style: italic; }
-
-  .award-pill {
-    font-family: 'Courier New', monospace;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 4px 9px;
+  body.cursor-hover #xh-box { width: 30px; height: 30px; background: var(--copper-dim); }
+  #xh-coords {
+    position: fixed; pointer-events: none; z-index: 99;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em;
+    color: var(--copper);
+    transform: translate(14px, 14px);
     white-space: nowrap;
   }
-  .pill-nat  { background: var(--green);    color: var(--cream); }
-  .pill-intl { background: var(--navy);     color: var(--mustard); }
-  .pill-bot  { background: var(--burgundy); color: var(--cream); }
-  .pill-biz  { background: var(--tweed);    color: var(--ink); }
+  body.cursor-off #xh-v, body.cursor-off #xh-h,
+  body.cursor-off #xh-box, body.cursor-off #xh-coords { opacity: 0; }
+}
+#xh-v, #xh-h, #xh-box, #xh-coords { display: none; }
+@media (pointer: fine) { #xh-v, #xh-h, #xh-box, #xh-coords { display: block; } }
 
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    background: var(--rule);
-    border: 2px solid var(--rule);
-  }
+/* ---------- spotlight cards ---------- */
+.project-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), var(--copper-dim), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+.project-card:hover::before { opacity: 1; }
 
-  .skill-group {
-    background: var(--cream);
-    padding: 32px;
-    border-top: 3px solid transparent;
-  }
-  .skill-group:nth-child(1) { border-top-color: var(--navy); }
-  .skill-group:nth-child(2) { border-top-color: var(--green); }
-  .skill-group:nth-child(3) { border-top-color: var(--mustard); }
-  .skill-group:nth-child(4) { border-top-color: var(--burgundy); }
+/* ---------- trace signal pulse ---------- */
+#pulse-path {
+  stroke: var(--copper);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-dasharray: 10 260;
+  stroke-linecap: round;
+  animation: signal 5s linear infinite;
+  opacity: 0.9;
+}
+@keyframes signal { to { stroke-dashoffset: -270; } }
 
-  .skill-group-title {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--navy);
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--rule);
-  }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .pulse, .blink { animation: none; }
+  #trace-path { stroke-dashoffset: 0 !important; }
+  #pulse-path { animation: none; display: none; }
+  .project-card:hover { transform: none; }
+}
 
-  .skill-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .skill-list li {
-    font-size: 14px;
-    color: var(--mid);
-    padding-left: 14px;
-    position: relative;
-  }
-  .skill-list li::before { content: '--'; position: absolute; left: 0; color: var(--rule); }
-
-  .exp-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    background: var(--rule);
-    border: 2px solid var(--rule);
-  }
-
-  .exp-item {
-    background: var(--cream);
-    padding: 40px;
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 48px;
-    border-left: 4px solid transparent;
-    transition: all 0.18s;
-  }
-  .exp-item:nth-child(1) { border-left-color: var(--navy); }
-  .exp-item:nth-child(2) { border-left-color: var(--green); }
-  .exp-item:nth-child(3) { border-left-color: var(--mustard); }
-  .exp-item:nth-child(4) { border-left-color: var(--burgundy); }
-  .exp-item:nth-child(5) { border-left-color: var(--tweed); }
-  .exp-item:hover { background: var(--off); }
-
-  .exp-type {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--mustard);
-    margin-bottom: 7px;
-  }
-  .exp-org { font-size: 17px; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.3px; }
-  .exp-date { font-family: 'Courier New', monospace; font-size: 11px; color: var(--light); }
-
-  .exp-points { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-  .exp-points li {
-    font-size: 14px; line-height: 1.72; color: var(--mid);
-    padding-left: 18px; position: relative;
-  }
-  .exp-points li::before { content: 'o'; position: absolute; left: 0; color: var(--rule); font-size: 12px; top: 2px; }
-  .exp-points li strong { color: var(--ink); font-weight: normal; font-style: italic; }
-
-  #contact {
-    padding: 100px 56px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-    background: var(--navy);
-    color: var(--cream);
-  }
-
-  .contact-left h2 {
-    font-size: clamp(34px, 5vw, 62px);
-    font-weight: normal;
-    letter-spacing: -2px;
-    line-height: 1.05;
-    margin-bottom: 20px;
-    color: var(--cream);
-  }
-  .contact-left h2 em { font-style: italic; color: var(--mustard); }
-  .contact-left p { font-size: 15px; color: rgba(245,240,232,0.6); line-height: 1.75; max-width: 360px; }
-
-  .contact-right { display: flex; flex-direction: column; gap: 10px; }
-
-  .contact-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 22px;
-    border: 1px solid rgba(245,240,232,0.15);
-    transition: all 0.18s;
-  }
-  .contact-item:hover { border-color: var(--mustard); background: rgba(245,240,232,0.05); }
-
-  .contact-item-label {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.35);
-  }
-  .contact-item-value { font-size: 14px; color: var(--cream); }
-
-  footer {
-    background: var(--ink);
-    color: rgba(245,240,232,0.4);
-    padding: 18px 56px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    .nav-links { display: none; }
-    #hero { grid-template-columns: 1fr; }
-    .hero-left { padding: 56px 24px 48px; }
-    .hero-right { padding: 40px 24px; }
-    .section-wrap { padding: 56px 24px; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .project-card.span2 { grid-column: span 1; }
-    .skills-grid { grid-template-columns: repeat(2, 1fr); }
-    .exp-item { grid-template-columns: 1fr; gap: 20px; }
-    #contact { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
-    footer { flex-direction: column; gap: 6px; padding: 18px 24px; text-align: center; }
-    .awards-table .award-scope-cell { display: none; }
-  }
+@media (max-width: 860px) {
+  nav { padding: 0 18px; }
+  .nav-links li a { display: none; }
+  .nav-links { gap: 10px; }
+  #hero, section.block, #contact { padding-left: 24px; padding-right: 24px; }
+  #now, #tooling { padding-left: 24px; padding-right: 24px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card.featured { grid-column: span 1; }
+  .exp-item { grid-template-columns: 1fr; gap: 14px; }
+  #contact { grid-template-columns: 1fr; gap: 40px; padding-top: 60px; padding-bottom: 60px; }
+  .award-scope { display: none; }
+  #titleblock { grid-template-columns: 1fr 1fr; }
+  #titleblock .tb-cell { border-bottom: 1.5px solid var(--rule); }
+  #trace-svg { display: none; }
+}
 </style>
 </head>
 <body>
+<div id="scroll-progress" aria-hidden="true"></div>
+<div id="xh-v" aria-hidden="true"></div>
+<div id="xh-h" aria-hidden="true"></div>
+<div id="xh-box" aria-hidden="true"></div>
+<div id="xh-coords" aria-hidden="true"></div>
+<div class="frame">
+<svg id="trace-svg" aria-hidden="true" preserveAspectRatio="none"></svg>
 
 <nav>
-  <div class="nav-logo">Sohum Vajaria</div>
-  <div class="nav-stripe">
-    <div class="nav-stripe-g"></div>
-    <div class="nav-stripe-m"></div>
-  </div>
+  <div class="nav-name">Sohum Vajaria <span class="ref mono">// SV-01</span></div>
   <ul class="nav-links">
     <li><a href="#projects">Projects</a></li>
     <li><a href="#awards">Awards</a></li>
-    <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><button id="theme-toggle" aria-label="Switch color theme">Soldermask</button></li>
   </ul>
 </nav>
 
 <section id="hero">
-  <div class="hero-left">
-    <div>
-      <div class="hero-eyebrow">Open to internships &amp; research</div>
-      <h1 class="hero-name">Sohum<br><em>Vajaria</em></h1>
-      <p class="hero-desc">
-        Rising junior at <strong>NCSSM Durham</strong> building real hardware.
-        CTO of <strong>Tremora</strong>, a wearable medical device startup.
-        I work across <strong>PCB design</strong>, <strong>embedded systems</strong>,
-        and <strong>mechanical engineering</strong>.
-      </p>
-      <div class="hero-actions">
-        <a href="#projects" class="btn btn-navy">See My Work</a>
-        <a href="#contact" class="btn btn-outline">Get In Touch</a>
-      </div>
-    </div>
+  <div class="hero-eyebrow mono">
+    <span>Rev 2.0</span><span class="sep">/</span>
+    <span>Cary, NC</span><span class="sep">/</span>
+    <span>Open to internships + research</span>
+    <span class="blink">_</span>
   </div>
-  <div class="hero-right herringbone">
-    <div>
-      <div class="hero-fact">
-        <span class="fact-label">Location</span>
-        <span class="fact-value">Cary, NC</span>
-      </div>
-      <div class="hero-fact">
-        <span class="fact-label">School</span>
-        <span class="fact-value">NCSSM Durham</span>
-      </div>
-      <div class="hero-fact">
-        <span class="fact-label">Year</span>
-        <span class="fact-value">Rising Junior, Class of 2027</span>
-      </div>
-      <div class="hero-fact">
-        <span class="fact-label">Role</span>
-        <span class="fact-value">CTO, Tremora</span>
-      </div>
-      <div class="hero-fact">
-        <span class="fact-label">Focus</span>
-        <span class="fact-value">PCB Design, Embedded Systems, CAD</span>
-      </div>
-      <div class="hero-fact">
-        <span class="fact-label">Email</span>
-        <span class="fact-value"><a href="mailto:sohumvajaria@gmail.com" style="color:var(--ink);text-decoration:underline;">sohumvajaria@gmail.com</a></span>
-      </div>
-    </div>
+  <h1 class="hero-name">Hardware person<br><span class="outline">who ships software.</span></h1>
+  <p class="hero-desc">
+    I'm Sohum, a rising junior at <strong>NCSSM Durham</strong> and co-founder of <strong>Tremora</strong>,
+    a wearable Parkinson's tremor tracker my team pitches in Atlanta this summer.
+    I design PCBs in KiCad and write firmware for ESP32s, and when I'm waiting on
+    parts to arrive I ship web apps. Three of them are live right now.
+  </p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn btn-solid">See the work</a>
+    <a href="#contact" class="btn btn-line">Contact</a>
   </div>
 </section>
 
-<div class="stripe-bar"></div>
+<div id="now">
+  <span class="now-label mono"><span class="pulse"></span>Now</span>
+  <span class="now-items">
+    Prepping the <b>Tremora</b> pitch for Atlanta &middot;
+    Interning at a <b>defense technology company</b> (details under NDA) &middot;
+    Building <b>Oreo</b>, an AI companion quadruped
+  </span>
+</div>
 
-<section id="projects" class="section-wrap">
+<section id="projects" class="block">
   <div class="section-header">
-    <span class="section-num">01</span>
     <h2 class="section-title">Projects</h2>
+    <span class="section-ref mono">SHT 1 &middot; Both sides of the stack</span>
   </div>
+
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button class="filter-btn active" data-filter="all">All <span class="count">9</span></button>
+    <button class="filter-btn" data-filter="hardware">Hardware <span class="count">5</span></button>
+    <button class="filter-btn" data-filter="software">Software <span class="count">4</span></button>
+  </div>
+
   <div class="projects-grid">
 
-    <div class="project-card span2 featured">
-      <div class="project-index">001 — Featured / Startup</div>
-      <div class="project-name">Tremora — Parkinson's Tremor Monitor</div>
-      <p class="project-body">CTO of a 4-person student startup building a wrist-worn device that captures Parkinson's tremor data using gyroscopes and accelerometers, logging to SD card for clinical review. I own the full hardware stack: KiCad PCB design, electrical systems, and Onshape CAD. Pitching at Atlanta Startup Village this summer.</p>
-      <div class="project-tags">
-        <span class="tag">KiCad PCB</span>
-        <span class="tag">Gyroscope / Accelerometer</span>
-        <span class="tag">Embedded C</span>
-        <span class="tag">Onshape CAD</span>
-        <span class="tag">SD Card Logging</span>
-        <span class="tag">Medical Device</span>
+    <div class="project-card featured reveal" data-cat="hardware">
+      <div class="project-top">
+        <span class="project-type">Hardware / Startup</span>
+        <span class="project-status status-wip">Pitching · Summer 2026</span>
       </div>
-      <div class="project-stat">Pitching at Atlanta Startup Village — Summer 2026</div>
+      <div class="project-name">Tremora</div>
+      <p class="project-body">
+        Wrist-worn device tracking Parkinson's tremors with gyroscopes and accelerometers,
+        logging every session to SD for clinical review. I own the hardware stack from
+        KiCad schematic to Onshape enclosure, and we pitch in Atlanta this summer with a
+        four person team.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">KiCad · IMU fusion · Embedded C · Onshape · SD logging</span>
+      </div>
     </div>
 
-    <div class="project-card">
-      <div class="project-index">002</div>
-      <div class="project-name">Computer Vision Soldering Robot</div>
-      <p class="project-body">Gantry robot that automatically solders PCB pins using OpenCV for pin detection and planar homography to map camera coordinates to board coordinates. Achieves 1.2mm placement accuracy, precise enough for real PCB assembly.</p>
-      <div class="project-tags">
-        <span class="tag">OpenCV</span>
-        <span class="tag">Python</span>
-        <span class="tag">CNC Gantry</span>
-        <span class="tag">Planar Homography</span>
-        <span class="tag">PCB</span>
+    <div class="project-card reveal" data-cat="software">
+      <div class="project-top">
+        <span class="project-type">Software / Game</span>
+        <span class="project-status status-live">Live</span>
       </div>
-      <div class="project-stat">1.2mm placement accuracy on live PCB pins</div>
+      <div class="project-name">Beat Roulette</div>
+      <p class="project-body">
+        Multiplayer music game where friends guess songs against each other in real time,
+        with synced lyrics on screen while the track plays.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">Next.js · PartyKit · Supabase · Deezer · LRCLIB</span>
+        <a class="project-link" href="https://beatroulette.app" target="_blank" rel="noopener">beatroulette.app</a>
+      </div>
     </div>
 
-    <div class="project-card">
-      <div class="project-index">003</div>
-      <div class="project-name">Magnetic Mecanum Truss Inspection Bot</div>
-      <p class="project-body">ESP32-powered robot that climbs steel warehouse trusses using a magnetic mecanum drive. Carries a thermal sensor to flag heat anomalies in structural components during automated inspection.</p>
-      <div class="project-tags">
-        <span class="tag">ESP32</span>
-        <span class="tag">Mecanum Drive</span>
-        <span class="tag">Thermal Sensing</span>
-        <span class="tag">Magnetics</span>
+    <div class="project-card reveal" data-cat="software">
+      <div class="project-top">
+        <span class="project-type">Software / Game</span>
+        <span class="project-status status-live">Live</span>
       </div>
-      <div class="project-stat">Stable vertical traversal on steel trusses</div>
+      <div class="project-name">Boil the Ocean</div>
+      <p class="project-body">
+        Say corporate jargon into your mic and rack up points while an AI roasts you for it.
+        Whisper handles transcription and Grok handles the roasting.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">Whisper · Grok API · Web Audio</span>
+        <a class="project-link" href="https://boiltheocean.com" target="_blank" rel="noopener">boiltheocean.com</a>
+      </div>
     </div>
 
-    <div class="project-card span2">
-      <div class="project-index">004 — Robotics</div>
-      <div class="project-name">FTC Robot: Spindexer + Outtake System</div>
-      <p class="project-body">CAD and build co-lead for FTC robotics team. Designed and integrated the Spindexer and outtake mechanism from CAD through final competition assembly. Optimized drivetrain for torque and durability under competition stress.</p>
-      <div class="project-tags">
-        <span class="tag">Onshape CAD</span>
-        <span class="tag">Mechanical Design</span>
-        <span class="tag">Drivetrain</span>
-        <span class="tag">FTC Robotics</span>
+    <div class="project-card reveal" data-cat="software">
+      <div class="project-top">
+        <span class="project-type">Software / Civic</span>
+        <span class="project-status status-live">Live</span>
       </div>
-      <div class="project-stat">FTC Impact Award — 1st Place</div>
+      <div class="project-name">Provide NC</div>
+      <p class="project-body">
+        Food access tool mapping government benefit locations across North Carolina,
+        so families find the resources near them without digging through agency sites.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">Maps · Public data</span>
+        <a class="project-link" href="https://providenc.org" target="_blank" rel="noopener">providenc.org</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="hardware">
+      <div class="project-top">
+        <span class="project-type">Hardware / Robotics</span>
+        <span class="project-status">Built</span>
+      </div>
+      <div class="project-name">CV Soldering Gantry</div>
+      <p class="project-body">
+        Gantry robot soldering PCB pins on its own. OpenCV finds each pin and planar
+        homography maps camera pixels to board coordinates, landing within 1.2mm on live boards.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">OpenCV · Python · CNC gantry · Homography</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="hardware">
+      <div class="project-top">
+        <span class="project-type">Hardware / Robotics</span>
+        <span class="project-status status-wip">In progress</span>
+      </div>
+      <div class="project-name">Oreo</div>
+      <p class="project-body">
+        AI companion quadruped built on the Sesame platform. Hardware is ordered and
+        firmware is in progress, with voice interaction as the core loop.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">Sesame · Quadruped · Voice AI</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="hardware">
+      <div class="project-top">
+        <span class="project-type">Hardware / Robotics</span>
+        <span class="project-status">Built</span>
+      </div>
+      <div class="project-name">Truss Inspection Bot</div>
+      <p class="project-body">
+        ESP32 robot climbing steel warehouse trusses on magnetic mecanum wheels,
+        carrying a thermal sensor to flag hot spots in structural steel.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">ESP32 · Mecanum drive · Thermal sensing · Magnetics</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="hardware">
+      <div class="project-top">
+        <span class="project-type">Hardware / Competition</span>
+        <span class="project-status">1st · Impact Award</span>
+      </div>
+      <div class="project-name">FTC Robot</div>
+      <p class="project-body">
+        CAD and build co-lead. Designed the spindexer and outtake from first sketch
+        through competition assembly, with a drivetrain tuned for torque under match stress.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">Onshape · Drivetrain · FTC</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="software">
+      <div class="project-top">
+        <span class="project-type">Software / iOS</span>
+        <span class="project-status">Built</span>
+      </div>
+      <div class="project-name">Renoq</div>
+      <p class="project-body">
+        Native iOS voice capture. Speak once and it routes the note to your calendar
+        or notes automatically, using time words in what you said to pick the destination.
+      </p>
+      <div class="project-foot">
+        <span class="project-stack">Swift · CloudKit · Speech routing</span>
+      </div>
     </div>
 
   </div>
+
+  <div id="gh-strip" class="reveal">
+    <span class="gh-label">github.com/sohumvajaria</span>
+    <span id="gh-repos">&hellip;</span>
+    <span id="gh-latest">loading recent activity…</span>
+  </div>
 </section>
 
-<div class="stripe-bar"></div>
-
-<section id="awards" class="section-wrap tweed herringbone">
+<section id="awards" class="block">
   <div class="section-header">
-    <span class="section-num">02</span>
     <h2 class="section-title">Awards</h2>
+    <span class="section-ref mono">SHT 2 &middot; National + international</span>
   </div>
   <table class="awards-table">
     <tbody>
-      <tr>
-        <td class="award-place">1st</td>
-        <td class="award-name-cell">FTC Impact Award</td>
-        <td class="award-scope-cell">FIRST Tech Challenge Robotics</td>
-        <td><span class="award-pill pill-bot">Robotics</span></td>
-      </tr>
-      <tr>
+      <tr class="reveal">
         <td class="award-place">3rd</td>
-        <td class="award-name-cell">Science Bowl</td>
-        <td class="award-scope-cell">National</td>
+        <td class="award-name">Science Bowl</td>
+        <td class="award-scope">National finals</td>
         <td><span class="award-pill pill-nat">National</span></td>
       </tr>
-      <tr>
+      <tr class="reveal">
+        <td class="award-place">1st</td>
+        <td class="award-name">FTC Impact Award</td>
+        <td class="award-scope">FIRST Tech Challenge</td>
+        <td><span class="award-pill">Robotics</span></td>
+      </tr>
+      <tr class="reveal">
+        <td class="award-place">Nationalist</td>
+        <td class="award-name">US National Chemistry Olympiad</td>
+        <td class="award-scope">Top 1000 in the US</td>
+        <td><span class="award-pill pill-nat">National</span></td>
+      </tr>
+      <tr class="reveal">
+        <td class="award-place">Semifinalist</td>
+        <td class="award-name">US Biology Olympiad</td>
+        <td class="award-scope">National</td>
+        <td><span class="award-pill pill-nat">National</span></td>
+      </tr>
+      <tr class="reveal">
         <td class="award-place">5th</td>
-        <td class="award-name-cell">You Be The Chemist</td>
-        <td class="award-scope-cell">National</td>
+        <td class="award-name">You Be The Chemist</td>
+        <td class="award-scope">National</td>
         <td><span class="award-pill pill-nat">National</span></td>
       </tr>
-      <tr>
+      <tr class="reveal">
         <td class="award-place">Top 100</td>
-        <td class="award-name-cell">Physics Brawl</td>
-        <td class="award-scope-cell">International</td>
+        <td class="award-name">Physics Brawl</td>
+        <td class="award-scope">International</td>
         <td><span class="award-pill pill-intl">International</span></td>
       </tr>
-      <tr>
-        <td class="award-place">Nationalist</td>
-        <td class="award-name-cell">US National Chemistry Olympiad</td>
-        <td class="award-scope-cell">National — Top 1000 in US</td>
-        <td><span class="award-pill pill-nat">National</span></td>
-      </tr>
-      <tr>
-        <td class="award-place">Semifinalist</td>
-        <td class="award-name-cell">US Biology Olympiad</td>
-        <td class="award-scope-cell">National</td>
-        <td><span class="award-pill pill-nat">National</span></td>
-      </tr>
-      <tr>
-        <td class="award-place">NQ</td>
-        <td class="award-name-cell">DECA</td>
-        <td class="award-scope-cell">National Qualifier</td>
-        <td><span class="award-pill pill-biz">Business</span></td>
+      <tr class="reveal">
+        <td class="award-place">Qualifier</td>
+        <td class="award-name">DECA Nationals</td>
+        <td class="award-scope">Business + entrepreneurship</td>
+        <td><span class="award-pill">Business</span></td>
       </tr>
     </tbody>
   </table>
 </section>
 
-<div class="stripe-bar"></div>
-
-<section id="skills" class="section-wrap">
+<section id="experience" class="block">
   <div class="section-header">
-    <span class="section-num">03</span>
-    <h2 class="section-title">Skills</h2>
-  </div>
-  <div class="skills-grid">
-    <div class="skill-group">
-      <div class="skill-group-title">PCB &amp; Electronics</div>
-      <ul class="skill-list">
-        <li>KiCad PCB Design</li>
-        <li>Circuit Prototyping</li>
-        <li>Sensor Integration</li>
-        <li>PCB Soldering</li>
-        <li>ESP32 / Arduino</li>
-      </ul>
-    </div>
-    <div class="skill-group">
-      <div class="skill-group-title">CAD &amp; Mechanical</div>
-      <ul class="skill-list">
-        <li>Onshape</li>
-        <li>3D Printing</li>
-        <li>Mechanical Assembly</li>
-        <li>Technical Visualization</li>
-      </ul>
-    </div>
-    <div class="skill-group">
-      <div class="skill-group-title">Software</div>
-      <ul class="skill-list">
-        <li>Embedded C</li>
-        <li>Python</li>
-        <li>OpenCV</li>
-        <li>Motor Control</li>
-        <li>Data Logging</li>
-      </ul>
-    </div>
-    <div class="skill-group">
-      <div class="skill-group-title">Other</div>
-      <ul class="skill-list">
-        <li>Startup Leadership</li>
-        <li>Project Management</li>
-        <li>Technical Presentation</li>
-        <li>Team Leadership</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<div class="stripe-bar"></div>
-
-<section id="experience" class="section-wrap tweed herringbone">
-  <div class="section-header">
-    <span class="section-num">04</span>
     <h2 class="section-title">Experience</h2>
+    <span class="section-ref mono">SHT 3</span>
   </div>
   <div class="exp-list">
-
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div>
-        <div class="exp-type">Startup / CTO</div>
+        <div class="exp-type">Startup / Co-founder</div>
         <div class="exp-org">Tremora</div>
-        <div class="exp-date">2026 — Present</div>
+        <div class="exp-date">2026 to present</div>
       </div>
-      <ul class="exp-points">
-        <li>Lead all hardware development for a <strong>wearable Parkinson's tremor monitor</strong> using gyroscopes, accelerometers, and SD card logging</li>
-        <li>Own the full technical stack: <strong>KiCad PCB design, electrical systems, and Onshape CAD</strong></li>
-        <li>Pitching at <strong>Atlanta Startup Village</strong>, summer 2026</li>
-      </ul>
+      <p class="exp-body">
+        I lead hardware for a <strong>wearable Parkinson's tremor monitor</strong>, owning
+        PCB design, electrical systems, and CAD on a four person team. We pitch in
+        <strong>Atlanta</strong> this summer.
+      </p>
     </div>
-
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div>
         <div class="exp-type">Internship</div>
         <div class="exp-org">Advanced Weapons Systems, Inc.</div>
         <div class="exp-date">Summer 2026</div>
       </div>
-      <ul class="exp-points">
-        <li>Working on <strong>sensor-based hardware systems</strong> at a defense technology company</li>
-        <li>Applying embedded systems and electromechanical design skills in a <strong>professional engineering environment</strong></li>
-      </ul>
+      <p class="exp-body">
+        Engineering intern at a <strong>defense technology company</strong>, working on
+        sensor-based hardware systems. Project details are under NDA.
+      </p>
     </div>
-
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div>
-        <div class="exp-type">Robotics Leadership</div>
+        <div class="exp-type">Robotics</div>
         <div class="exp-org">FTC Robotics Team</div>
-        <div class="exp-date">2025 — 2026</div>
+        <div class="exp-date">2025 to 2026</div>
       </div>
-      <ul class="exp-points">
-        <li>CAD and build co-lead for <strong>Spindexer and outtake system</strong>, from design through competition assembly</li>
-        <li>Developed drivetrain optimized for <strong>torque and durability</strong> under competition stress</li>
-        <li>Won <strong>FTC Impact Award, 1st Place</strong></li>
-      </ul>
+      <p class="exp-body">
+        CAD and build co-lead. Took the <strong>spindexer and outtake system</strong> from
+        design through competition assembly, and the team won the
+        <strong>Impact Award, 1st place</strong>.
+      </p>
     </div>
-
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div>
-        <div class="exp-type">Club Leadership</div>
+        <div class="exp-type">Leadership</div>
         <div class="exp-org">Science Club President</div>
-        <div class="exp-date">2025 — 2026</div>
+        <div class="exp-date">2025 to 2026</div>
       </div>
-      <ul class="exp-points">
-        <li>Directed operations for a <strong>40+ member</strong> organization with weekly meetings</li>
-        <li>Grew membership by <strong>20%</strong> through hands-on workshops</li>
-        <li>Mentored junior members in research methods and project execution</li>
-      </ul>
+      <p class="exp-body">
+        Ran a <strong>40+ member</strong> club with weekly meetings, growing membership
+        <strong>20%</strong> through hands-on workshops and mentoring newer members through
+        their first projects.
+      </p>
     </div>
-
   </div>
 </section>
+
+<div id="tooling">
+  <div class="tool-row reveal">
+    <b>Hardware</b><span>KiCad</span><span class="dot">·</span><span>Onshape</span><span class="dot">·</span><span>ESP32</span><span class="dot">·</span><span>Embedded C</span><span class="dot">·</span><span>3D printing (Bambu A1)</span>
+  </div>
+  <div class="tool-row reveal">
+    <b>Software</b><span>Python</span><span class="dot">·</span><span>OpenCV</span><span class="dot">·</span><span>TypeScript</span><span class="dot">·</span><span>Next.js</span><span class="dot">·</span><span>Supabase</span><span class="dot">·</span><span>Swift</span>
+  </div>
+</div>
 
 <section id="contact">
   <div class="contact-left">
-    <h2>Let's build<br><em>something.</em></h2>
-    <p>Open to internships, research positions, and interesting engineering problems. Reach out any time.</p>
+    <h2>Let's build<br><span class="outline">something real.</span></h2>
+    <p>Open to internships, research positions, and hard engineering problems. I reply fast.</p>
   </div>
   <div class="contact-right">
-    <a href="mailto:sohumvajaria@gmail.com" class="contact-item">
-      <span class="contact-item-label">Email</span>
-      <span class="contact-item-value">sohumvajaria@gmail.com</span>
+    <button class="contact-item" id="copy-email" aria-label="Copy email address">
+      <span class="ci-label" id="copy-label">Email · click to copy</span>
+      <span class="ci-value">sohumvajaria@gmail.com</span>
+    </button>
+    <a href="https://github.com/sohumvajaria" target="_blank" rel="noopener" class="contact-item">
+      <span class="ci-label">GitHub</span>
+      <span class="ci-value">github.com/sohumvajaria</span>
     </a>
-    <div class="contact-item">
-      <span class="contact-item-label">Location</span>
-      <span class="contact-item-value">Cary, NC</span>
+    <div class="contact-item" style="cursor:default;">
+      <span class="ci-label">Location</span>
+      <span class="ci-value">Cary, NC</span>
     </div>
-    <a href="https://github.com/sohumvajaria" target="_blank" class="contact-item">
-      <span class="contact-item-label">GitHub</span>
-      <span class="contact-item-value">github.com/sohumvajaria</span>
-    </a>
   </div>
 </section>
 
-<footer>
-  <span>Sohum Vajaria — NCSSM Durham</span>
-  <span>sohumvajaria.github.io</span>
+<footer id="titleblock">
+  <div class="tb-cell"><div class="tb-label">Title</div><div class="tb-value">SOHUM VAJARIA · PERSONAL SITE</div></div>
+  <div class="tb-cell"><div class="tb-label">Drawn by</div><div class="tb-value">S. VAJARIA · NCSSM '28</div></div>
+  <div class="tb-cell"><div class="tb-label">Rev</div><div class="tb-value">2.1</div></div>
+  <div class="tb-cell"><div class="tb-label">Date</div><div class="tb-value">2026-07-09</div></div>
+  <div class="tb-cell"><div class="tb-label">Sheet</div><div class="tb-value">1 OF 1</div></div>
 </footer>
+</div>
 
+<script>
+(function () {
+  // ---- theme toggle ----
+  var toggle = document.getElementById('theme-toggle');
+  var root = document.documentElement;
+  function setTheme(t) {
+    root.setAttribute('data-theme', t);
+    toggle.textContent = t === 'schematic' ? 'Soldermask' : 'Schematic';
+    try { localStorage.setItem('sv-theme', t); } catch (e) {}
+  }
+  try {
+    var saved = localStorage.getItem('sv-theme');
+    if (saved) setTheme(saved);
+  } catch (e) {}
+  toggle.addEventListener('click', function () {
+    setTheme(root.getAttribute('data-theme') === 'schematic' ? 'soldermask' : 'schematic');
+  });
+
+  // ---- project filters ----
+  var btns = document.querySelectorAll('.filter-btn');
+  var cards = document.querySelectorAll('.project-card');
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-filter');
+      cards.forEach(function (c) {
+        var show = f === 'all' || c.getAttribute('data-cat') === f;
+        c.classList.toggle('hidden', !show);
+      });
+      buildTrace();
+    });
+  });
+
+  // ---- copy email ----
+  var copyBtn = document.getElementById('copy-email');
+  var copyLabel = document.getElementById('copy-label');
+  copyBtn.addEventListener('click', function () {
+    var email = 'sohumvajaria@gmail.com';
+    function done() {
+      copyLabel.textContent = 'Copied';
+      setTimeout(function () { copyLabel.textContent = 'Email · click to copy'; }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(done, function () {
+        window.location.href = 'mailto:' + email;
+      });
+    } else {
+      window.location.href = 'mailto:' + email;
+    }
+  });
+
+  // ---- scroll reveal ----
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  // ---- copper trace spine: draws with scroll, vias at each section ----
+  var svg = document.getElementById('trace-svg');
+  var path = null;
+  function buildTrace() {
+    if (window.innerWidth <= 860) return;
+    svg.innerHTML = '';
+    var frame = document.querySelector('.frame');
+    var H = frame.scrollHeight;
+    svg.setAttribute('viewBox', '0 0 40 ' + H);
+    svg.style.height = H + 'px';
+    var anchors = ['hero', 'projects', 'awards', 'experience', 'contact'];
+    var ys = anchors.map(function (id) {
+      var el = document.getElementById(id);
+      return el ? el.offsetTop + 70 : 0;
+    });
+    var d = 'M 20 0';
+    ys.forEach(function (y, i) {
+      var x = i % 2 === 0 ? 12 : 28;
+      d += ' L 20 ' + (y - 40) + ' L ' + x + ' ' + (y - 20) + ' L ' + x + ' ' + (y + 20) + ' L 20 ' + (y + 40);
+    });
+    d += ' L 20 ' + H;
+    path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('id', 'trace-path');
+    path.setAttribute('d', d);
+    path.setAttribute('pathLength', '1');
+    svg.appendChild(path);
+    var pp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pp.setAttribute('id', 'pulse-path');
+    pp.setAttribute('d', d);
+    svg.appendChild(pp);
+    ys.forEach(function (y, i) {
+      var x = i % 2 === 0 ? 12 : 28;
+      var via = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      via.setAttribute('class', 'via');
+      via.setAttribute('cx', x);
+      via.setAttribute('cy', y);
+      via.setAttribute('r', 5);
+      svg.appendChild(via);
+    });
+    onScroll();
+  }
+  var progressBar = document.getElementById('scroll-progress');
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if (progressBar) progressBar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+    if (!path) return;
+    if (reduced) { path.style.strokeDashoffset = 0; return; }
+    var p = max > 0 ? Math.min(1, (window.scrollY + window.innerHeight * 0.4) / max) : 1;
+    path.style.strokeDashoffset = 1 - p;
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', buildTrace);
+  window.addEventListener('load', buildTrace);
+  buildTrace();
+
+  // ---- CAD crosshair cursor (fine pointers, motion allowed) ----
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+  if (finePointer && !reduced) {
+    var xv = document.getElementById('xh-v');
+    var xhh = document.getElementById('xh-h');
+    var xb = document.getElementById('xh-box');
+    var xc = document.getElementById('xh-coords');
+    var tx = 0, ty = 0, cx = 0, cy = 0, moved = false;
+    document.body.classList.add('cursor-on', 'cursor-off');
+    document.addEventListener('mousemove', function (e) {
+      tx = e.clientX; ty = e.clientY;
+      if (!moved) { cx = tx; cy = ty; moved = true; document.body.classList.remove('cursor-off'); }
+    });
+    document.addEventListener('mouseleave', function () { document.body.classList.add('cursor-off'); });
+    document.addEventListener('mouseenter', function () { if (moved) document.body.classList.remove('cursor-off'); });
+    document.addEventListener('mouseover', function (e) {
+      document.body.classList.toggle('cursor-hover', !!e.target.closest('a, button'));
+    });
+    (function loop() {
+      cx += (tx - cx) * 0.35;
+      cy += (ty - cy) * 0.35;
+      xv.style.transform = 'translateX(' + cx + 'px)';
+      xhh.style.transform = 'translateY(' + cy + 'px)';
+      xb.style.left = cx + 'px'; xb.style.top = cy + 'px';
+      xc.style.left = cx + 'px'; xc.style.top = cy + 'px';
+      xc.textContent = 'X ' + (cx / 10).toFixed(1) + '  Y ' + ((cy + window.scrollY) / 10).toFixed(1) + ' mm';
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  // ---- spotlight cards ----
+  cards.forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // ---- headline scramble decode on load ----
+  var outline = document.querySelector('.hero-name .outline');
+  if (outline && !reduced) {
+    var finalText = outline.textContent;
+    var glyphs = '01<>/{}[]=+-*#_';
+    var frame = 0, total = 26;
+    (function scramble() {
+      frame++;
+      var settled = Math.floor((frame / total) * finalText.length);
+      var out = '';
+      for (var i = 0; i < finalText.length; i++) {
+        var ch = finalText[i];
+        if (ch === ' ' || i < settled) out += ch;
+        else out += glyphs[Math.floor(Math.random() * glyphs.length)];
+      }
+      outline.textContent = out;
+      if (frame < total) setTimeout(scramble, 42);
+      else outline.textContent = finalText;
+    })();
+  }
+
+  // ---- magnetic hero buttons ----
+  if (finePointer && !reduced) {
+    document.querySelectorAll('.hero-actions .btn').forEach(function (btn) {
+      btn.addEventListener('mousemove', function (e) {
+        var r = btn.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width / 2);
+        var dy = e.clientY - (r.top + r.height / 2);
+        btn.style.transform = 'translate(' + dx * 0.18 + 'px,' + dy * 0.3 + 'px)';
+      });
+      btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
+    });
+  }
+
+  // ---- live GitHub stats ----
+  var repoEl = document.getElementById('gh-repos');
+  var latestEl = document.getElementById('gh-latest');
+  fetch('https://api.github.com/users/sohumvajaria/repos?sort=pushed&per_page=100')
+    .then(function (r) { if (!r.ok) throw new Error('rate limit'); return r.json(); })
+    .then(function (repos) {
+      var n = repos.length;
+      if (reduced) {
+        repoEl.innerHTML = '<b>' + n + '</b> public repos';
+      } else {
+        var cur = 0;
+        var step = Math.max(1, Math.ceil(n / 24));
+        var tick = setInterval(function () {
+          cur = Math.min(n, cur + step);
+          repoEl.innerHTML = '<b>' + cur + '</b> public repos';
+          if (cur >= n) clearInterval(tick);
+        }, 40);
+      }
+      if (repos.length > 0) {
+        var latest = repos[0];
+        var days = Math.floor((Date.now() - new Date(latest.pushed_at)) / 86400000);
+        var when = days === 0 ? 'today' : days === 1 ? 'yesterday' : days + ' days ago';
+        latestEl.innerHTML = 'last push: <b>' + latest.name + '</b> · ' + when;
+      }
+    })
+    .catch(function () {
+      repoEl.textContent = '';
+      latestEl.textContent = 'live activity on GitHub';
+    });
+})();
+</script>
 </body>
 </html>
