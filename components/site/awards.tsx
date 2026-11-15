@@ -9,7 +9,7 @@ export function Awards() {
       <div className="grid gap-3 sm:grid-cols-2">
         {awards.map((a, i) => (
           <BlurFade inView delay={0.04 * (i % 4)} key={a.name}>
-            <div className="flex items-baseline gap-5 rounded-2xl border border-border bg-card p-5 backdrop-blur">
+            <div className="flex items-baseline gap-5 rounded-2xl p-5" style={{ background: `var(--pastel-${(i % 6) + 1})` }}>
               <div className="min-w-24 font-serif text-2xl text-sage">{a.place}</div>
               <div>
                 <div className="font-medium">{a.name}</div>

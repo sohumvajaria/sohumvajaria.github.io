@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { MagicCard } from "@/components/ui/magic-card";
 import { projects, type Project } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SectionHead, Tag } from "./section";
@@ -14,9 +13,9 @@ function Status({ s }: { s: NonNullable<Project["status"]> }) {
   return (
     <span
       className={cn(
-        "rounded-full border border-border px-2.5 py-0.5 text-xs whitespace-nowrap text-muted-foreground",
-        s.tone === "live" && "border-sage/40 bg-sage/10 text-sage",
-        s.tone === "wip" && "border-clay/40 bg-clay/10 text-clay",
+        "rounded-full bg-white/70 px-2.5 py-0.5 text-xs whitespace-nowrap text-foreground dark:bg-white/10",
+        s.tone === "live" && "text-sage",
+        s.tone === "wip" && "text-clay",
       )}
     >
       {s.label}
@@ -55,11 +54,9 @@ export function Projects() {
       <div className="grid gap-4 md:grid-cols-2">
         {shown.map((p, i) => {
           const card = (
-            <MagicCard
-              className="h-full rounded-2xl"
-              gradientColor="color-mix(in srgb, var(--sage) 22%, transparent)"
-              gradientFrom="var(--sage)"
-              gradientTo="var(--clay)"
+            <div
+              className="h-full rounded-3xl transition duration-300 hover:-translate-y-1"
+              style={{ background: `var(--pastel-${(i % 6) + 1})` }}
             >
               <div className="flex h-full flex-col p-7">
                 <div className="mb-4 flex items-center justify-between gap-3">
@@ -77,7 +74,7 @@ export function Projects() {
                   ))}
                 </div>
               </div>
-            </MagicCard>
+            </div>
           );
           return (
             <BlurFade

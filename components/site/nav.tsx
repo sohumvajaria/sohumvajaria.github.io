@@ -18,7 +18,7 @@ export function Nav() {
     } catch {}
   }
   return (
-    <nav className="sticky top-4 z-50 mx-auto mt-4 flex max-w-2xl items-center justify-between gap-4 rounded-full border border-border bg-card py-2 pr-2 pl-5 shadow-sm backdrop-blur-xl max-sm:mx-3">
+    <nav className="sticky top-4 z-50 mx-auto mt-4 flex max-w-2xl items-center justify-between gap-4 rounded-full border border-border bg-card py-2 pr-2 pl-5 max-sm:mx-3">
       <a href="#top" className="font-serif text-lg">
         Sohum Vajaria
       </a>

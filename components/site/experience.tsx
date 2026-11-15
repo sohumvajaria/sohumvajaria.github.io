@@ -9,7 +9,7 @@ export function Experience() {
       <div className="relative space-y-4 border-l border-border pl-8">
         {experience.map((e, i) => (
           <BlurFade inView delay={0.05 * i} key={e.org + e.role}>
-            <div className="relative rounded-2xl border border-border bg-card p-6 backdrop-blur">
+            <div className="relative rounded-2xl p-6" style={{ background: `var(--pastel-${(i % 6) + 1})` }}>
               <span className="absolute top-8 -left-[37px] size-2.5 rounded-full border-2 border-sage bg-background" />
               <div className="font-mono text-xs tracking-wider text-sage uppercase">{e.date}</div>
               <h3 className="mt-2 font-serif text-2xl">{e.role}</h3>
