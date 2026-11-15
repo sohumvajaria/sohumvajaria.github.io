@@ -4,7 +4,7 @@ import { awards, projects, toolkit } from "@/lib/data";
 import { SectionHead, Tag } from "./section";
 
 export function About() {
-  const nationalFinishes = awards.filter((a) => a.place !== "Top 100").length;
+  const nationalFinishes = awards.filter((a) => !["Top 100", "Submitted"].includes(a.place)).length;
   const stats = [
     { value: projects.length, label: "Projects built" },
     { value: nationalFinishes, label: "National-level finishes" },
@@ -29,7 +29,7 @@ export function About() {
         </BlurFade>
         <BlurFade inView delay={0.15} className="grid grid-cols-3 gap-4 md:grid-cols-1">
           {stats.map((s) => (
-            <div key={s.label} className="rounded-2xl border border-border bg-card p-5 backdrop-blur">
+            <div key={s.label} className="rounded-2xl p-5 border border-border bg-card">
               <div className="font-serif text-4xl font-light">
                 <NumberTicker value={s.value} />
                 {s.suffix}
@@ -39,7 +39,7 @@ export function About() {
           ))}
         </BlurFade>
       </div>
-      <BlurFade inView delay={0.1} className="mt-12 space-y-4 rounded-2xl border border-border bg-card p-6 backdrop-blur">
+      <BlurFade inView delay={0.1} className="mt-12 space-y-4 rounded-2xl border border-border bg-card p-6">
         {Object.entries(toolkit).map(([group, items]) => (
           <div key={group} className="flex flex-wrap items-baseline gap-3">
             <span className="w-20 font-mono text-xs tracking-wider text-sage uppercase">{group}</span>

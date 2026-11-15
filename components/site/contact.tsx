@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { SolidButton } from "@/components/ui/solid-button";
 import { EMAIL, GITHUB } from "@/lib/data";
 
 export function Contact() {
@@ -27,14 +27,14 @@ export function Contact() {
           Open to internships, research positions, and hard engineering problems. I reply fast.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <ShimmerButton onClick={copy} background="var(--primary)" shimmerColor="#ffffff" className="[&>span]:text-primary-foreground">
+          <SolidButton onClick={copy}>
             <span className="text-sm">{copied ? "Copied" : EMAIL}</span>
-          </ShimmerButton>
+          </SolidButton>
           <a
             href={GITHUB}
             target="_blank"
             rel="noopener"
-            className="rounded-full border border-border bg-card px-6 py-3 text-sm transition hover:border-sage"
+            className="rounded-full border border-border bg-card px-6 py-3 text-sm transition hover:-translate-y-0.5"
           >
             GitHub
           </a>
