@@ -34,7 +34,7 @@ export function Contact() {
             href={GITHUB}
             target="_blank"
             rel="noopener"
-            className="rounded-full bg-[var(--pastel-2)] px-6 py-3 text-sm transition hover:-translate-y-0.5"
+            className="rounded-full border border-border bg-card px-6 py-3 text-sm transition hover:-translate-y-0.5"
           >
             GitHub
           </a>

@@ -15,10 +15,6 @@ function GithubMark() {
 export function Hero() {
   return (
     <section id="top" className="relative flex min-h-[88vh] flex-col items-center justify-center px-6 pt-16 pb-24 text-center">
-      {/* flat pastel shapes */}
-      <div className="pointer-events-none absolute top-24 left-[8%] -z-10 size-40 rounded-full bg-[var(--pastel-2)] sm:size-64" />
-      <div className="pointer-events-none absolute right-[8%] bottom-28 -z-10 size-32 rounded-full bg-[var(--pastel-3)] sm:size-52" />
-      <div className="pointer-events-none absolute top-1/2 right-[18%] -z-10 size-16 rounded-full bg-[var(--pastel-1)] max-sm:hidden" />
       {/* corner brackets, editorial figure frame */}
       <div className="pointer-events-none absolute inset-x-6 top-6 bottom-6 -z-10 max-w-6xl self-center max-md:hidden">
         <span className="absolute top-0 left-0 size-4 border-t border-l border-border" />
@@ -28,7 +24,7 @@ export function Hero() {
       </div>
 
       <BlurFade delay={0.05}>
-        <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-border bg-[var(--pastel-1)] px-4 py-1.5 text-[13px] text-foreground">
+        <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-border border border-border bg-card px-4 py-1.5 text-[13px] text-muted-foreground">
           <span className="size-1.5 rounded-full bg-sage" />
           NCSSM · Cary, NC · Open to internships and research
         </div>
@@ -61,14 +57,14 @@ export function Hero() {
             target="_blank"
             rel="noopener"
             aria-label="GitHub"
-            className="grid size-11 place-items-center rounded-full border border-border bg-[var(--pastel-5)] transition hover:-translate-y-0.5"
+            className="grid size-11 place-items-center rounded-full border border-border border border-border bg-card transition hover:-translate-y-0.5"
           >
             <GithubMark />
           </a>
           <a
             href={`mailto:${EMAIL}`}
             aria-label="Email"
-            className="grid size-11 place-items-center rounded-full border border-border bg-[var(--pastel-5)] transition hover:-translate-y-0.5"
+            className="grid size-11 place-items-center rounded-full border border-border border border-border bg-card transition hover:-translate-y-0.5"
           >
             <Mail className="size-4" />
           </a>

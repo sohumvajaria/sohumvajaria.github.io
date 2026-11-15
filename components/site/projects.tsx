@@ -55,8 +55,7 @@ export function Projects() {
         {shown.map((p, i) => {
           const card = (
             <div
-              className="h-full rounded-3xl transition duration-300 hover:-translate-y-1"
-              style={{ background: `var(--pastel-${(i % 6) + 1})` }}
+              className="h-full rounded-3xl transition duration-300 hover:-translate-y-1 border border-border bg-card"
             >
               <div className="flex h-full flex-col p-7">
                 <div className="mb-4 flex items-center justify-between gap-3">
