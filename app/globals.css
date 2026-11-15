@@ -213,3 +213,24 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* ---------- PCB background + sprite ---------- */
+@keyframes trace-draw { to { stroke-dashoffset: 0; } }
+.trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: trace-draw 3.2s ease-out forwards;
+}
+@keyframes leg-a { 0%, 49.99% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes leg-b { 0%, 49.99% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-26px); } }
+.legs-a { animation: leg-a 0.5s steps(1) infinite; }
+.legs-b { animation: leg-b 0.5s steps(1) infinite; }
+.still .legs-a { animation: none; opacity: 1; }
+.still .legs-b { animation: none; opacity: 0; }
+.hop { animation: hop 0.5s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .trace { animation: none; stroke-dashoffset: 0; }
+  .legs-a, .legs-b, .hop { animation: none; }
+  .legs-b { opacity: 0; }
+}
