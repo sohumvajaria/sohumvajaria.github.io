@@ -167,7 +167,7 @@ export const awards = [
   { place: "1st", name: "FTC Impact Award", scope: "FIRST Tech Challenge" },
   { place: "Nationalist", name: "US National Chemistry Olympiad", scope: "Top 1000 in the US" },
   { place: "Semifinalist", name: "US Biology Olympiad", scope: "National" },
-  { place: "Nationals", name: "TSA Manufacturing Prototype", scope: "Technology Student Association" },
+  { place: "Submitted", name: "Congressional App Challenge", scope: "Provide NC, under Rep. Alma Adams" },
   { place: "Qualifier", name: "DECA Nationals", scope: "Business and entrepreneurship" },
   { place: "5th", name: "You Be The Chemist", scope: "National" },
   { place: "Top 100", name: "Physics Brawl", scope: "International" },

@@ -4,7 +4,7 @@ import { awards, projects, toolkit } from "@/lib/data";
 import { SectionHead, Tag } from "./section";
 
 export function About() {
-  const nationalFinishes = awards.filter((a) => a.place !== "Top 100").length;
+  const nationalFinishes = awards.filter((a) => !["Top 100", "Submitted"].includes(a.place)).length;
   const stats = [
     { value: projects.length, label: "Projects built" },
     { value: nationalFinishes, label: "National-level finishes" },
