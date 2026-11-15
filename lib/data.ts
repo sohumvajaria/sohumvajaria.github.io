@@ -125,8 +125,8 @@ export const projects: Project[] = [
     name: "Mamba Maze",
     kind: "Hardware · Competition",
     cat: "hardware",
-    status: { label: "TSA Nationals" },
-    body: "A maze-solving robot with IR sensing and an OLED readout, built on an ESP32 and taken to TSA nationals.",
+    status: { label: "Built" },
+    body: "A maze-solving robot with IR sensing and an OLED readout, built on an ESP32.",
     stack: ["ESP32", "IR sensors", "OLED"],
   },
 ];
