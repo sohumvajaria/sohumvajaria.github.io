@@ -40,6 +40,10 @@ export const projects: Project[] = [
     body: "A statewide food access tool mapping benefit locations across North Carolina so families find resources near them without digging through agency sites. Submitted to the Congressional App Challenge under Rep. Alma Adams.",
     stack: ["Maps", "Public data"],
     href: "https://provide-nc.org/",
+    media: [
+      { src: "/projects/provide-nc-dashboard.webp", alt: "Provide food access dashboard with resource filters and a map of North Carolina" },
+      { src: "/projects/provide-nc.webp", alt: "Provide landing page" },
+    ],
   },
   {
     name: "CTSO Center",
@@ -49,6 +53,10 @@ export const projects: Project[] = [
     body: "AI roleplay prep for DECA and FBLA competitors, built on the Claude API and tested with real DECA students.",
     stack: ["Claude API", "Next.js"],
     href: "https://ctso-center.vercel.app",
+    media: [
+      { src: "/projects/ctso-center-scenarios.webp", alt: "CTSO Center scenario library of DECA roleplays grouped by category" },
+      { src: "/projects/ctso-center.webp", alt: "CTSO Center landing page" },
+    ],
   },
   {
     name: "BioWire",
@@ -58,6 +66,8 @@ export const projects: Project[] = [
     body: "A daily biomedical intelligence brief, so the day's research and industry news lands in one calm read.",
     stack: ["Web", "Daily digest"],
     href: "https://biowire.app",
+
+    media: [{ src: "/projects/biowire.webp", alt: "BioWire daily brief front page with the latest edition's top stories" }],
   },
   {
     name: "Beat Roulette",
@@ -67,6 +77,8 @@ export const projects: Project[] = [
     body: "A multiplayer music game where friends guess songs against each other in real time, with synced lyrics. Built with a team for the Audiotool LetsBuild hackathon.",
     stack: ["Next.js", "PartyKit", "Supabase"],
     href: "https://beatroulette.app",
+
+    media: [{ src: "/projects/beat-roulette.webp", alt: "Beat Roulette home screen with game modes and the spin wheel" }],
   },
   {
     name: "Boil the Ocean",
@@ -75,7 +87,11 @@ export const projects: Project[] = [
     status: { label: "Live", tone: "live" },
     body: "Say corporate jargon into your mic and rack up points while an AI roasts you for it. Whisper transcribes, Grok does the roasting.",
     stack: ["Whisper", "Grok", "Web Audio"],
-    href: "https://boiltheocean.com",
+    href: "https://boiltheocean.vercel.app",
+    media: [
+      { src: "/projects/boil-the-ocean-game.webp", alt: "Boil the Ocean game screen with a VC Partner role card, buzzwords, and a scenario to pitch" },
+      { src: "/projects/boil-the-ocean.webp", alt: "Boil the Ocean landing page" },
+    ],
   },
   {
     name: "Jargonaut",
@@ -84,6 +100,11 @@ export const projects: Project[] = [
     status: { label: "Hackathon" },
     body: "A legal document analyzer that translates dense contract language into plain English. Built at STEMINATE Hacks 2026 and deployed to Vercel.",
     stack: ["Next.js", "LLM analysis"],
+    href: "https://jargonaut-sand.vercel.app",
+    media: [
+      { src: "/projects/jargonaut-redline.webp", alt: "Jargonaut redline view of a sample lease with flagged clauses, California statute citations, and an 8 of 10 risk score" },
+      { src: "/projects/jargonaut.webp", alt: "Jargonaut landing page" },
+    ],
   },
   {
     name: "Renoq",
@@ -91,7 +112,8 @@ export const projects: Project[] = [
     cat: "software",
     status: { label: "Built" },
     body: "Native iOS voice capture. Speak once and it routes the note to your calendar or notes by reading the time words in what you said.",
-    stack: ["Swift", "SpeechAnalyzer", "EventKit", "CloudKit"],
+    stack: ["Swift", "SpeechAnalyzer", "EventKit", "Foundation Models"],
+    media: [{ src: "/projects/renoq.webp", alt: "Renoq recording and notes screens, rendered from the app's SwiftUI source" }],
   },
   {
     name: "World Cup Picks",
@@ -100,6 +122,11 @@ export const projects: Project[] = [
     status: { label: "Live", tone: "live" },
     body: "A soccer prediction app where friends make picks and compete on a live leaderboard.",
     stack: ["Next.js", "Supabase", "Vercel"],
+    href: "https://worldcup-picks-five.vercel.app",
+    media: [
+      { src: "/projects/worldcup-picks-teams.webp", alt: "World Cup Picks team draft screen with tiered multipliers and three teams picked, shown with sample data" },
+      { src: "/projects/worldcup-picks.webp", alt: "World Cup Picks sign-in page" },
+    ],
   },
   {
     name: "Oreo",
