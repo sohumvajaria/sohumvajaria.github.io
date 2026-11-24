@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useState, type MouseEvent } from "react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { projects, type Project } from "@/lib/data";
+import { projects, type Media, type Project } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SectionHead, Tag } from "./section";
 
@@ -20,6 +20,65 @@ function Status({ s }: { s: NonNullable<Project["status"]> }) {
     >
       {s.label}
     </span>
+  );
+}
+
+function MediaStrip({ media, wide }: { media: Media[]; wide?: boolean }) {
+  const [i, setI] = useState(0);
+  const m = media[i];
+  const go = (e: MouseEvent, d: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setI((v) => (v + d + media.length) % media.length);
+  };
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-t-3xl border-b border-border bg-muted",
+        wide ? "aspect-[16/9]" : "aspect-[4/3]",
+      )}
+    >
+      {m.video ? (
+        <video
+          key={m.src}
+          src={m.src}
+          poster={m.poster}
+          aria-label={m.alt}
+          className="size-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img key={m.src} src={m.src} alt={m.alt} loading="lazy" className="size-full object-contain" />
+      )}
+      {media.length > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Previous photo"
+            onClick={(e) => go(e, -1)}
+            className="absolute top-1/2 left-3 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white transition hover:bg-black/70"
+          >
+            <ChevronLeft className="size-4" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next photo"
+            onClick={(e) => go(e, 1)}
+            className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white transition hover:bg-black/70"
+          >
+            <ChevronRight className="size-4" />
+          </button>
+          <span className="absolute right-3 bottom-3 rounded-full bg-black/50 px-2 py-0.5 font-mono text-[11px] text-white">
+            {i + 1}/{media.length}
+          </span>
+        </>
+      )}
+    </div>
   );
 }
 
@@ -55,9 +114,12 @@ export function Projects() {
         {shown.map((p, i) => {
           const card = (
             <div
-              className="h-full rounded-3xl transition duration-300 hover:-translate-y-1 border border-border bg-card"
+              className="flex h-full flex-col rounded-3xl transition duration-300 hover:-translate-y-1 border border-border bg-card"
             >
-              <div className="flex h-full flex-col p-7">
+              {p.media && p.media.length > 0 && (
+                <MediaStrip media={p.media} wide={p.featured && filter === "all"} />
+              )}
+              <div className="flex flex-1 flex-col p-7">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <span className="font-mono text-[11px] tracking-wide text-muted-foreground">{p.kind}</span>
                   {p.status && <Status s={p.status} />}
